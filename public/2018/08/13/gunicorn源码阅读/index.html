@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="kunkun">
 <meta property="og:description" content="入口首先程序的入口为gunicorn/app/wsgiapp这个模块。 1234567891011def run():    &quot;&quot;&quot;\    The ``gunicorn`` command line runner for launching Gunicorn with    generic WSGI applications.    &quot;&quot;&quot;    from gunicorn.app.wsgiap">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-13T09:10:24.497Z">
+<meta property="og:updated_time" content="2018-09-06T13:04:15.056Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gunicorn源码阅读">
 <meta name="twitter:description" content="入口首先程序的入口为gunicorn/app/wsgiapp这个模块。 1234567891011def run():    &quot;&quot;&quot;\    The ``gunicorn`` command line runner for launching Gunicorn with    generic WSGI applications.    &quot;&quot;&quot;    from gunicorn.app.wsgiap">
@@ -24,7 +24,7 @@
     <link rel="alternative" href="/atom.xml" title="kunkun" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/assets/img/favicon.png">
   
   <link rel="stylesheet" type="text/css" href="/./main.0cf68a.css">
   <style type="text/css">
@@ -62,6 +62,8 @@
 			
 				<li><a href="/">主页</a></li>
 	        
+				<li><a href="/tags/Python/">Python</a></li>
+	        
 				<li><a href="/tags/随笔/">随笔</a></li>
 	        
 			</ul>
@@ -85,6 +87,8 @@
 					<a class="github" target="_blank" href="https://github.com/cfk1996" title="github"><i class="icon-github"></i></a>
 		        
 					<a class="jianshu" target="_blank" href="https://www.jianshu.com/u/166e83cf403b" title="jianshu"><i class="icon-jianshu"></i></a>
+		        
+					<a class="mail" target="_blank" href="/cfk0419@163.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
 		</nav>
@@ -116,6 +120,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -125,16 +131,20 @@
 			        
 						<a class="jianshu" target="_blank" href="https://www.jianshu.com/u/166e83cf403b" title="jianshu"><i class="icon-jianshu"></i></a>
 			        
+						<a class="mail" target="_blank" href="/cfk0419@163.com" title="mail"><i class="icon-mail"></i></a>
+			        
 				</div>
 			</nav>
 
 			<nav class="header-menu js-header-menu">
-				<ul style="width: 50%">
+				<ul style="width: 70%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+					<li style="width: 33.333333333333336%"><a href="/tags/Python/">Python</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="/tags/随笔/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -227,9 +237,19 @@
             <span class="tooltip-content">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>thanks<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/zhifubao.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
                     
                   </div>
                 </span>
@@ -340,13 +360,57 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#入口"><span class="toc-number">1.</span> <span class="toc-text">入口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#run方法"><span class="toc-number">2.</span> <span class="toc-text">run方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Worker进程"><span class="toc-number">3.</span> <span class="toc-text">Worker进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GeventWorker"><span class="toc-number">4.</span> <span class="toc-text">GeventWorker</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AsyncWorker"><span class="toc-number">4.1.</span> <span class="toc-text">AsyncWorker</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
 
 
   
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="gunicorn源码阅读" data-title="gunicorn源码阅读" data-url="http://yoursite.com/2018/08/13/gunicorn源码阅读/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
   
+  
+  
+  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script>
+  var cloudTieConfig = {
+    url: "http://yoursite.com/2018/08/13/gunicorn源码阅读/", 
+    sourceId: "gunicorn源码阅读",
+    productKey: "true",
+    target: "cloud-tie-wrapper"
+  };
+</script>
+<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   
@@ -384,7 +448,7 @@
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -442,11 +506,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -505,7 +569,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">96年帅程序猿</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">96年帅程序猿 cfk0419@163.com</div>
   	  	
     	</section>
     

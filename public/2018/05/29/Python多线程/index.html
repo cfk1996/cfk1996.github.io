@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="kunkun">
 <meta property="og:description" content="最近在学习并发编程，打算写一个并发编程系列的文章。之前也看过很多Python多线程多进程的教程、博客等，但收益不大。因为大多数文章上来就是写几个对照代码，不去解释那些库方法的作用，然后得出多线程多进程确实快。这种教程相当于让我死记硬背，这是我无法接受的。 经过长期摸索，我发现了一个神奇的网址，那就是The Python Standard Library.这在我刚学Python时就了解过，但当时看到">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-29T11:12:39.000Z">
+<meta property="og:updated_time" content="2018-09-06T13:04:15.056Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python多线程">
 <meta name="twitter:description" content="最近在学习并发编程，打算写一个并发编程系列的文章。之前也看过很多Python多线程多进程的教程、博客等，但收益不大。因为大多数文章上来就是写几个对照代码，不去解释那些库方法的作用，然后得出多线程多进程确实快。这种教程相当于让我死记硬背，这是我无法接受的。 经过长期摸索，我发现了一个神奇的网址，那就是The Python Standard Library.这在我刚学Python时就了解过，但当时看到">
@@ -24,7 +24,7 @@
     <link rel="alternative" href="/atom.xml" title="kunkun" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/assets/img/favicon.png">
   
   <link rel="stylesheet" type="text/css" href="/./main.0cf68a.css">
   <style type="text/css">
@@ -62,6 +62,8 @@
 			
 				<li><a href="/">主页</a></li>
 	        
+				<li><a href="/tags/Python/">Python</a></li>
+	        
 				<li><a href="/tags/随笔/">随笔</a></li>
 	        
 			</ul>
@@ -85,6 +87,8 @@
 					<a class="github" target="_blank" href="https://github.com/cfk1996" title="github"><i class="icon-github"></i></a>
 		        
 					<a class="jianshu" target="_blank" href="https://www.jianshu.com/u/166e83cf403b" title="jianshu"><i class="icon-jianshu"></i></a>
+		        
+					<a class="mail" target="_blank" href="/cfk0419@163.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
 		</nav>
@@ -116,6 +120,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -125,16 +131,20 @@
 			        
 						<a class="jianshu" target="_blank" href="https://www.jianshu.com/u/166e83cf403b" title="jianshu"><i class="icon-jianshu"></i></a>
 			        
+						<a class="mail" target="_blank" href="/cfk0419@163.com" title="mail"><i class="icon-mail"></i></a>
+			        
 				</div>
 			</nav>
 
 			<nav class="header-menu js-header-menu">
-				<ul style="width: 50%">
+				<ul style="width: 70%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+					<li style="width: 33.333333333333336%"><a href="/tags/Python/">Python</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="/tags/随笔/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -277,9 +287,19 @@
             <span class="tooltip-content">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>thanks<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/zhifubao.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
                     
                   </div>
                 </span>
@@ -399,13 +419,57 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础概念"><span class="toc-number">1.</span> <span class="toc-text">基础概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GIL"><span class="toc-number">2.</span> <span class="toc-text">GIL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#threading"><span class="toc-number">3.</span> <span class="toc-text">threading</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建线程"><span class="toc-number">3.1.</span> <span class="toc-text">创建线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#class-threading-Thread"><span class="toc-number">3.2.</span> <span class="toc-text">class threading.Thread</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同步机制"><span class="toc-number">4.</span> <span class="toc-text">同步机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lock-锁"><span class="toc-number">4.1.</span> <span class="toc-text">Lock 锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RLock-可重入锁"><span class="toc-number">4.2.</span> <span class="toc-text">RLock 可重入锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Condition-条件"><span class="toc-number">4.3.</span> <span class="toc-text">Condition 条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Semaphore-信号量"><span class="toc-number">4.4.</span> <span class="toc-text">Semaphore 信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Event-事件"><span class="toc-number">4.5.</span> <span class="toc-text">Event 事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#上下文管理器"><span class="toc-number">4.6.</span> <span class="toc-text">上下文管理器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">5.</span> <span class="toc-text">最后</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
 
 
   
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Python多线程" data-title="Python多线程" data-url="http://yoursite.com/2018/05/29/Python多线程/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
   
+  
+  
+  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script>
+  var cloudTieConfig = {
+    url: "http://yoursite.com/2018/05/29/Python多线程/", 
+    sourceId: "Python多线程",
+    productKey: "true",
+    target: "cloud-tie-wrapper"
+  };
+</script>
+<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   
@@ -443,7 +507,7 @@
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -501,11 +565,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -564,7 +628,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">96年帅程序猿</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">96年帅程序猿 cfk0419@163.com</div>
   	  	
     	</section>
     

@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="kunkun">
 <meta property="og:description" content="最近看Flask源码时发现很多不熟悉的语法，其中一个就是描述符，在config.py中出现，描述符的用处很多，是Python中很多特性的底层机制，如properties, methods, static methods, class methods和super()。 什么是描述符描述符一般是一个有绑定动作的属性对象，这个属性的获取、赋值、删除操作和途径被描述符协议重写。对象属性的正常获取顺序是这样">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-13T03:44:54.559Z">
+<meta property="og:updated_time" content="2018-09-06T13:04:15.056Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python descriptor 描述符">
 <meta name="twitter:description" content="最近看Flask源码时发现很多不熟悉的语法，其中一个就是描述符，在config.py中出现，描述符的用处很多，是Python中很多特性的底层机制，如properties, methods, static methods, class methods和super()。 什么是描述符描述符一般是一个有绑定动作的属性对象，这个属性的获取、赋值、删除操作和途径被描述符协议重写。对象属性的正常获取顺序是这样">
@@ -24,7 +24,7 @@
     <link rel="alternative" href="/atom.xml" title="kunkun" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/assets/img/favicon.png">
   
   <link rel="stylesheet" type="text/css" href="/./main.0cf68a.css">
   <style type="text/css">
@@ -62,6 +62,8 @@
 			
 				<li><a href="/">主页</a></li>
 	        
+				<li><a href="/tags/Python/">Python</a></li>
+	        
 				<li><a href="/tags/随笔/">随笔</a></li>
 	        
 			</ul>
@@ -85,6 +87,8 @@
 					<a class="github" target="_blank" href="https://github.com/cfk1996" title="github"><i class="icon-github"></i></a>
 		        
 					<a class="jianshu" target="_blank" href="https://www.jianshu.com/u/166e83cf403b" title="jianshu"><i class="icon-jianshu"></i></a>
+		        
+					<a class="mail" target="_blank" href="/cfk0419@163.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
 		</nav>
@@ -116,6 +120,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -125,16 +131,20 @@
 			        
 						<a class="jianshu" target="_blank" href="https://www.jianshu.com/u/166e83cf403b" title="jianshu"><i class="icon-jianshu"></i></a>
 			        
+						<a class="mail" target="_blank" href="/cfk0419@163.com" title="mail"><i class="icon-mail"></i></a>
+			        
 				</div>
 			</nav>
 
 			<nav class="header-menu js-header-menu">
-				<ul style="width: 50%">
+				<ul style="width: 70%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+					<li style="width: 33.333333333333336%"><a href="/tags/Python/">Python</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="/tags/随笔/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -198,9 +208,19 @@
             <span class="tooltip-content">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>thanks<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/zhifubao.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
                     
                   </div>
                 </span>
@@ -320,13 +340,57 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是描述符"><span class="toc-number">1.</span> <span class="toc-text">什么是描述符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么需要描述符"><span class="toc-number">2.</span> <span class="toc-text">为什么需要描述符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#描述符的调用机制"><span class="toc-number">3.</span> <span class="toc-text">描述符的调用机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#描述符实例"><span class="toc-number">4.</span> <span class="toc-text">描述符实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-number">5.</span> <span class="toc-text">参考链接</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
 
 
   
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="descriptor" data-title="Python descriptor 描述符" data-url="http://yoursite.com/2018/07/13/descriptor/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
   
+  
+  
+  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script>
+  var cloudTieConfig = {
+    url: "http://yoursite.com/2018/07/13/descriptor/", 
+    sourceId: "descriptor",
+    productKey: "true",
+    target: "cloud-tie-wrapper"
+  };
+</script>
+<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   
@@ -364,7 +428,7 @@
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -422,11 +486,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -485,7 +549,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">96年帅程序猿</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">96年帅程序猿 cfk0419@163.com</div>
   	  	
     	</section>
     
