@@ -1,11 +1,13 @@
 //! moment.js locale configuration
+//! locale : kazakh (kk)
+//! authors : Nurlan Rakhimzhanov : https://github.com/nurlan
 
 ;(function (global, factory) {
    typeof exports === 'object' && typeof module !== 'undefined'
        && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   typeof define === 'function' && define.amd ? define(['moment'], factory) :
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this, function (moment) { 'use strict';
 
 
     var suffixes = {
@@ -57,7 +59,6 @@
             future : '%s ішінде',
             past : '%s бұрын',
             s : 'бірнеше секунд',
-            ss : '%d секунд',
             m : 'бір минут',
             mm : '%d минут',
             h : 'бір сағат',
@@ -69,7 +70,7 @@
             y : 'бір жыл',
             yy : '%d жыл'
         },
-        dayOfMonthOrdinalParse: /\d{1,2}-(ші|шы)/,
+        ordinalParse: /\d{1,2}-(ші|шы)/,
         ordinal : function (number) {
             var a = number % 10,
                 b = number >= 100 ? 100 : null;
@@ -83,4 +84,4 @@
 
     return kk;
 
-})));
+}));

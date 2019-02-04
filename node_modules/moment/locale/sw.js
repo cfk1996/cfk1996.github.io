@@ -1,11 +1,13 @@
 //! moment.js locale configuration
+//! locale : swahili (sw)
+//! author : Fahad Kassim : https://github.com/fadsel
 
 ;(function (global, factory) {
    typeof exports === 'object' && typeof module !== 'undefined'
        && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   typeof define === 'function' && define.amd ? define(['moment'], factory) :
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this, function (moment) { 'use strict';
 
 
     var sw = moment.defineLocale('sw', {
@@ -35,7 +37,6 @@
             future : '%s baadaye',
             past : 'tokea %s',
             s : 'hivi punde',
-            ss : 'sekunde %d',
             m : 'dakika moja',
             mm : 'dakika %d',
             h : 'saa limoja',
@@ -55,4 +56,4 @@
 
     return sw;
 
-})));
+}));

@@ -17,7 +17,7 @@
 <meta property="og:description" content="前言这是Java集合源码系列的第三篇了，准备来介绍一下LinkedList这个类,LinkedList常与ArrayList放在一起比较，都是List接口的实现类，但是底层的数据结构不同，导致它们在一些操作上各有优缺点，需要根据应用场景灵活选用List。ArrayList的细节上篇文章已经介绍过了，不了解的可以回过去看一下。LinkedList的底层实现是一个双向链表，同时也实现了Deque接口，">
 <meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/LinkedList.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/wechat.jpg">
-<meta property="og:updated_time" content="2019-02-03T13:53:33.446Z">
+<meta property="og:updated_time" content="2019-02-04T05:36:17.657Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java集合源码系列-LinkedList">
 <meta name="twitter:description" content="前言这是Java集合源码系列的第三篇了，准备来介绍一下LinkedList这个类,LinkedList常与ArrayList放在一起比较，都是List接口的实现类，但是底层的数据结构不同，导致它们在一些操作上各有优缺点，需要根据应用场景灵活选用List。ArrayList的细节上篇文章已经介绍过了，不了解的可以回过去看一下。LinkedList的底层实现是一个双向链表，同时也实现了Deque接口，">
@@ -64,11 +64,11 @@
 			
 				<li><a href="/">主页</a></li>
 	        
+				<li><a href="/tags/Java">Java</a></li>
+	        
 				<li><a href="/tags/Python/">Python</a></li>
 	        
 				<li><a href="/tags/随笔/">随笔</a></li>
-	        
-				<li><a href="/tags/Java">Java</a></li>
 	        
 			</ul>
 		</nav>
@@ -148,11 +148,11 @@
 				
 					<li style="width: 25%"><a href="/">主页</a></li>
 		        
+					<li style="width: 25%"><a href="/tags/Java">Java</a></li>
+		        
 					<li style="width: 25%"><a href="/tags/Python/">Python</a></li>
 		        
 					<li style="width: 25%"><a href="/tags/随笔/">随笔</a></li>
-		        
-					<li style="width: 25%"><a href="/tags/Java">Java</a></li>
 		        
 				</ul>
 			</nav>
@@ -188,6 +188,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这是Java集合源码系列的第三篇了，准备来介绍一下<code>LinkedList</code>这个类,<code>LinkedList</code>常与<code>ArrayList</code>放在一起比较，都是<code>List</code>接口的实现类，但是底层的数据结构不同，导致它们在一些操作上各有优缺点，需要根据应用场景灵活选用<code>List</code>。<code>ArrayList</code>的细节上篇文章已经介绍过了，不了解的可以回过去看一下。<code>LinkedList</code>的底层实现是一个双向链表，同时也实现了<code>Deque</code>接口，因此也可以作为双向队列的一个实现，这是<code>LinkedList</code>相比<code>ArrayList</code>的另外一个重大特性。话不多说，直接进入源码分析阶段吧,按照惯例，依然是从使用集合的整个生命周期来作为行文路线，即创建–&gt;插入–&gt;获取–&gt;删除。</p>
+<a id="more"></a>
 <h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><h4 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h4><p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/LinkedList.png" alt="LinkedList"></p>
 <h4 id="底层数据结构–双向链表"><a href="#底层数据结构–双向链表" class="headerlink" title="底层数据结构–双向链表"></a>底层数据结构–双向链表</h4><p>前面介绍到<code>LinkedList</code>的底层数据结构是双向链表，那么先来看一下其实现。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    E item;</span><br><span class="line">    Node&lt;E&gt; next;</span><br><span class="line">    Node&lt;E&gt; prev;</span><br><span class="line">    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">        <span class="keyword">this</span>.item = element;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">        <span class="keyword">this</span>.prev = prev;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>

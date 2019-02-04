@@ -1,5 +1,5 @@
 //! moment.js locale configuration
-//! locale : Nepalese [ne]
+//! locale : nepali/nepalese
 //! author : suvash : https://github.com/suvash
 
 import moment from '../moment';
@@ -95,7 +95,6 @@ export default moment.defineLocale('ne', {
         future : '%sमा',
         past : '%s अगाडि',
         s : 'केही क्षण',
-        ss : '%d सेकेण्ड',
         m : 'एक मिनेट',
         mm : '%d मिनेट',
         h : 'एक घण्टा',

@@ -1,11 +1,13 @@
 //! moment.js locale configuration
+//! locale : nepali/nepalese
+//! author : suvash : https://github.com/suvash
 
 ;(function (global, factory) {
    typeof exports === 'object' && typeof module !== 'undefined'
        && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   typeof define === 'function' && define.amd ? define(['moment'], factory) :
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this, function (moment) { 'use strict';
 
 
     var symbolMap = {
@@ -99,7 +101,6 @@
             future : '%sमा',
             past : '%s अगाडि',
             s : 'केही क्षण',
-            ss : '%d सेकेण्ड',
             m : 'एक मिनेट',
             mm : '%d मिनेट',
             h : 'एक घण्टा',
@@ -119,4 +120,4 @@
 
     return ne;
 
-})));
+}));

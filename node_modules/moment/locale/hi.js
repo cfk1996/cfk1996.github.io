@@ -1,11 +1,13 @@
 //! moment.js locale configuration
+//! locale : hindi (hi)
+//! author : Mayank Singhal : https://github.com/mayanksinghal
 
 ;(function (global, factory) {
    typeof exports === 'object' && typeof module !== 'undefined'
        && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   typeof define === 'function' && define.amd ? define(['moment'], factory) :
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this, function (moment) { 'use strict';
 
 
     var symbolMap = {
@@ -60,7 +62,6 @@
             future : '%s में',
             past : '%s पहले',
             s : 'कुछ ही क्षण',
-            ss : '%d सेकंड',
             m : 'एक मिनट',
             mm : '%d मिनट',
             h : 'एक घंटा',
@@ -120,4 +121,4 @@
 
     return hi;
 
-})));
+}));

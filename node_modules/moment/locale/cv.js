@@ -1,11 +1,13 @@
 //! moment.js locale configuration
+//! locale : chuvash (cv)
+//! author : Anatoly Mironov : https://github.com/mirontoli
 
 ;(function (global, factory) {
    typeof exports === 'object' && typeof module !== 'undefined'
        && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   typeof define === 'function' && define.amd ? define(['moment'], factory) :
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this, function (moment) { 'use strict';
 
 
     var cv = moment.defineLocale('cv', {
@@ -37,7 +39,6 @@
             },
             past : '%s каялла',
             s : 'пӗр-ик ҫеккунт',
-            ss : '%d ҫеккунт',
             m : 'пӗр минут',
             mm : '%d минут',
             h : 'пӗр сехет',
@@ -49,7 +50,7 @@
             y : 'пӗр ҫул',
             yy : '%d ҫул'
         },
-        dayOfMonthOrdinalParse: /\d{1,2}-мӗш/,
+        ordinalParse: /\d{1,2}-мӗш/,
         ordinal : '%d-мӗш',
         week : {
             dow : 1, // Monday is the first day of the week.
@@ -59,4 +60,4 @@
 
     return cv;
 
-})));
+}));

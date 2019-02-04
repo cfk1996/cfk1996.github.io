@@ -1,11 +1,13 @@
 //! moment.js locale configuration
+//! locale : dhivehi (dv)
+//! author : Jawish Hameed : https://github.com/jawish
 
 ;(function (global, factory) {
    typeof exports === 'object' && typeof module !== 'undefined'
        && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   typeof define === 'function' && define.amd ? define(['moment'], factory) :
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this, function (moment) { 'use strict';
 
 
     var months = [
@@ -69,7 +71,6 @@
             future : 'ތެރޭގައި %s',
             past : 'ކުރިން %s',
             s : 'ސިކުންތުކޮޅެއް',
-            ss : 'd% ސިކުންތު',
             m : 'މިނިޓެއް',
             mm : 'މިނިޓު %d',
             h : 'ގަޑިއިރެއް',
@@ -95,4 +96,4 @@
 
     return dv;
 
-})));
+}));

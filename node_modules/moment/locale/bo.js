@@ -1,11 +1,13 @@
 //! moment.js locale configuration
+//! locale : tibetan (bo)
+//! author : Thupten N. Chakrishar : https://github.com/vajradog
 
 ;(function (global, factory) {
    typeof exports === 'object' && typeof module !== 'undefined'
        && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   typeof define === 'function' && define.amd ? define(['moment'], factory) :
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this, function (moment) { 'use strict';
 
 
     var symbolMap = {
@@ -59,7 +61,6 @@
             future : '%s ལ་',
             past : '%s སྔན་ལ',
             s : 'ལམ་སང',
-            ss : '%d སྐར་ཆ།',
             m : 'སྐར་མ་གཅིག',
             mm : '%d སྐར་མ',
             h : 'ཆུ་ཚོད་གཅིག',
@@ -115,4 +116,4 @@
 
     return bo;
 
-})));
+}));
