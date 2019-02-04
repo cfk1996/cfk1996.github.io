@@ -15,7 +15,6 @@
 <meta property="og:url" content="http://yoursite.com/2018/07/13/descriptor/index.html">
 <meta property="og:site_name" content="kunkun">
 <meta property="og:description" content="最近看Flask源码时发现很多不熟悉的语法，其中一个就是描述符，在config.py中出现，描述符的用处很多，是Python中很多特性的底层机制，如properties, methods, static methods, class methods和super()。 什么是描述符描述符一般是一个有绑定动作的属性对象，这个属性的获取、赋值、删除操作和途径被描述符协议重写。对象属性的正常获取顺序是这样">
-<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2019-02-03T07:16:46.091Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python descriptor 描述符">
@@ -196,11 +195,11 @@
 <p>方法中的<code>instance</code>属性返回的是获取属性的那个对象，在这里就是<code>xiaoming</code>，<code>owner</code>是获取属性的对象的类，在这里就是<code>Person</code>。</p>
 <h3 id="描述符的调用机制"><a href="#描述符的调用机制" class="headerlink" title="描述符的调用机制"></a>描述符的调用机制</h3><p>上面提到了非描述符属性的获取途径，定义了描述符协议后，<code>obj.b</code>的操作将调用<code>b.__get__(obj)</code>这个方法来获取属性。描述符的调用机制根据调用对象是<strong>对象</strong>还是<strong>类</strong>有一些区别。</p>
 <p>描述符是通过<code>type.__getattribute__()</code>方法被调用，这也是为什么描述符必须是在新式类中的原因，继承自<code>object</code>的类被称为新式类，否则没有这个方法，则无法调用描述符的方法。</p>
-<p>对于对象来说，<code>object.__getattribute__()</code>会将<code>b.x</code> 转换为 <code>type(b).__dict__[&#39;x&#39;].__get__(b, type(b))</code>。这个转换通过下面这样的一个优先链：<code>data descriptors</code>大于实例变量，实例变量大于 <code>non-data descriptors</code>，如果存在<code>__getattr__()</code>，则<code>__getattr__()</code>优先级最低。完整的C实现在<a href="https://docs.python.org/2/c-api/object.html#c.PyObject_GenericGetAttr" title="PyObject_GenericGetAttr" target="_blank" rel="noopener"><code>PyObject_GenericGetAttr()</code></a> in <a href="https://github.com/python/cpython/tree/2.7/Objects/object.c" target="_blank" rel="noopener">Objects/object.c</a>.</p>
+<p>对于对象来说，<code>object.__getattribute__()</code>会将<code>b.x</code> 转换为 <code>type(b).__dict__[&#39;x&#39;].__get__(b, type(b))</code>。这个转换通过下面这样的一个优先链：<code>data descriptors</code>大于实例变量，实例变量大于 <code>non-data descriptors</code>，如果存在<code>__getattr__()</code>，则<code>__getattr__()</code>优先级最低。完整的C实现在<a href="https://docs.python.org/2/c-api/object.html#c.PyObject_GenericGetAttr" title="PyObject_GenericGetAttr" target="_blank" rel="external"><code>PyObject_GenericGetAttr()</code></a> in <a href="https://github.com/python/cpython/tree/2.7/Objects/object.c" target="_blank" rel="external">Objects/object.c</a>.</p>
 <p>对于类来说，<code>object.__getattribute__()</code>会将 <code>B.x</code> 转换为<code>B.__dict__[&#39;x&#39;].__get__(None, B)</code>。Python实现如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__getattribute__</span><span class="params">(self, key)</span>:</span></span><br><span class="line">    <span class="string">"Emulate type_getattro() in Objects/typeobject.c"</span></span><br><span class="line">    v = object.__getattribute__(self, key)</span><br><span class="line">    <span class="keyword">if</span> hasattr(v, <span class="string">'__get__'</span>):</span><br><span class="line">        <span class="keyword">return</span> v.__get__(<span class="keyword">None</span>, self)</span><br><span class="line">    <span class="keyword">return</span> v</span><br></pre></td></tr></table></figure></p>
 <h3 id="描述符实例"><a href="#描述符实例" class="headerlink" title="描述符实例"></a>描述符实例</h3><p>上面提到了一个最简单的描述符实例，就是对属性进行取值或者赋值时进行额外的操作，同时保持代码的简洁。描述符在Python语言中本来也有很多的应用，但是能力不够，不能很好的理解其中的奥妙，就不误导大家了。主要是<code>Property</code>,<code>Function and method</code>和<code>static method and class method</code>这几个方面，给出链接，有兴趣的可以钻研一下。</p>
-<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="http://martyalchin.com/2007/nov/23/python-descriptors-part-1-of-2/" target="_blank" rel="noopener">Python Descriptors, Part 1 of 2</a></p>
-<p><a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="noopener">Descriptor HowTo Guide</a></p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="http://martyalchin.com/2007/nov/23/python-descriptors-part-1-of-2/" target="_blank" rel="external">Python Descriptors, Part 1 of 2</a></p>
+<p><a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="external">Descriptor HowTo Guide</a></p>
 
       
 
@@ -315,18 +314,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/08/13/gunicorn源码阅读/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/05/29/Python多线程/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          gunicorn源码阅读
+          Python多线程
         
       </div>
     </a>
   
   
-    <a href="/2018/05/29/Python多线程/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Python多线程</div>
+    <a href="/2018/08/13/gunicorn源码阅读/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">gunicorn源码阅读</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -365,38 +364,7 @@
 
 
   
-  <div class="duoshuo">
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="descriptor" data-title="Python descriptor 描述符" data-url="http://yoursite.com/2018/07/13/descriptor/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-	<!-- 多说公共JS代码 end -->
-</div>
-
   
-  
-  
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: "http://yoursite.com/2018/07/13/descriptor/", 
-    sourceId: "descriptor",
-    productKey: "true",
-    target: "cloud-tie-wrapper"
-  };
-</script>
-<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   

@@ -15,7 +15,6 @@
 <meta property="og:url" content="http://yoursite.com/2019/02/03/Java集合源码系列-LinkedList/index.html">
 <meta property="og:site_name" content="kunkun">
 <meta property="og:description" content="前言这是Java集合源码系列的第三篇了，准备来介绍一下LinkedList这个类,LinkedList常与ArrayList放在一起比较，都是List接口的实现类，但是底层的数据结构不同，导致它们在一些操作上各有优缺点，需要根据应用场景灵活选用List。ArrayList的细节上篇文章已经介绍过了，不了解的可以回过去看一下。LinkedList的底层实现是一个双向链表，同时也实现了Deque接口，">
-<meta property="og:locale" content="default">
 <meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/LinkedList.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/wechat.jpg">
 <meta property="og:updated_time" content="2019-02-03T13:53:33.446Z">
@@ -206,9 +205,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//返回队列第一个元素的值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Node&lt;E&gt; f = first;</span><br><span class="line">    <span class="keyword">return</span> (f == <span class="keyword">null</span>) ? <span class="keyword">null</span> : f.item;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//返回队列第一个元素的值，与peek的区别在于，element方法在第一个元素不存在时会抛出异常</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">element</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> getFirst();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//返回队列第一个元素，并删除</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Node&lt;E&gt; f = first;</span><br><span class="line">    <span class="keyword">return</span> (f == <span class="keyword">null</span>) ? <span class="keyword">null</span> : unlinkFirst(f);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//返回队列第一个元素，并删除，为空抛异常</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> removeFirst();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//末尾添加</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> add(e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//头节点添加</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerFirst</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    addFirst(e);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//末尾添加</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerLast</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    addLast(e);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//弹出list的第一个元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> removeFirst();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><code>LinkedList</code>的大部分代码都介绍完了，可以看出来比较简单。<code>LinkedList</code>底层实现为双向链表，除了可以作为<strong>List</strong>外，还可以作为队列和栈的实现类。因为是双向链表，所以对频繁的插入和删除操作较为友好，但是对频繁的根据下标获取的场景不够友好，需要权衡一下。才疏学浅，如有错误，欢迎指出</p>
 <h3 id="往期回顾"><a href="#往期回顾" class="headerlink" title="往期回顾"></a>往期回顾</h3><ul>
-<li><p><a href="https://cfk1996.github.io/2019/01/12/Java%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97-HashMap/" target="_blank" rel="noopener">Java集合源码系列-HashMap</a></p>
+<li><p><a href="https://cfk1996.github.io/2019/01/12/Java%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97-HashMap/" target="_blank" rel="external">Java集合源码系列-HashMap</a></p>
 </li>
-<li><p><a href="https://cfk1996.github.io/2019/01/22/Java%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97-ArrayList/" target="_blank" rel="noopener">Java集合源码系列-ArrayList</a></p>
+<li><p><a href="https://cfk1996.github.io/2019/01/22/Java%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97-ArrayList/" target="_blank" rel="external">Java集合源码系列-ArrayList</a></p>
 </li>
 </ul>
 <h3 id="欢迎关注我的公众号"><a href="#欢迎关注我的公众号" class="headerlink" title="欢迎关注我的公众号"></a>欢迎关注我的公众号</h3><p>欢迎关注我的公众号，会经常分享一些技术文章和生活随笔～</p>
@@ -331,11 +330,15 @@
   
 <nav id="article-nav">
   
-  
-    <a href="/2019/01/22/Java集合源码系列-ArrayList/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Java集合源码系列-ArrayList</div>
-      <i class="icon-circle-right"></i>
+    <a href="/2019/01/22/Java集合源码系列-ArrayList/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Java集合源码系列-ArrayList
+        
+      </div>
     </a>
+  
   
 </nav>
 
@@ -372,38 +375,7 @@
 
 
   
-  <div class="duoshuo">
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Java集合源码系列-LinkedList" data-title="Java集合源码系列-LinkedList" data-url="http://yoursite.com/2019/02/03/Java集合源码系列-LinkedList/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-	<!-- 多说公共JS代码 end -->
-</div>
-
   
-  
-  
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: "http://yoursite.com/2019/02/03/Java集合源码系列-LinkedList/", 
-    sourceId: "Java集合源码系列-LinkedList",
-    productKey: "true",
-    target: "cloud-tie-wrapper"
-  };
-</script>
-<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
   

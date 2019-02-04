@@ -80,10 +80,10 @@ share_jia: true
 #具体请参考wiki：https://github.com/litten/hexo-theme-yilia/wiki/
 
 #1、多说
-duoshuo: True
+duoshuo: false
 
 #2、网易云跟帖
-wangyiyun: True
+wangyiyun: false
 
 #3、畅言
 changyan_appid: false
