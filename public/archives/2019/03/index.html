@@ -6,19 +6,14 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>常用排序算法总结 | kunkun</title>
+  <title>Archives: 2019/3 | kunkun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="排序算法非常的多，在学习数据结构和算法时肯定都会学习到关于排序的算法，虽然现在高级语言都自带内置的排序函数，但是理解一些常见排序算法的思想和适用场合也是非常重要的，这也是面试时的经典题目，所以准备找工作的我打算将这些算法复习和整理一遍，所有算法代码采用Python编写。（数组下标从0开始） 冒泡排序冒泡排序应该是第一个学习的排序算法吧，在学习C语言时就会学到，虽然效率比较低，但是在某些不需要全部排">
-<meta name="keywords" content="数据结构,算法">
-<meta property="og:type" content="article">
-<meta property="og:title" content="常用排序算法总结">
-<meta property="og:url" content="http://yoursite.com/2018/05/29/常用排序算法总结/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="kunkun">
+<meta property="og:url" content="http://yoursite.com/archives/2019/03/index.html">
 <meta property="og:site_name" content="kunkun">
-<meta property="og:description" content="排序算法非常的多，在学习数据结构和算法时肯定都会学习到关于排序的算法，虽然现在高级语言都自带内置的排序函数，但是理解一些常见排序算法的思想和适用场合也是非常重要的，这也是面试时的经典题目，所以准备找工作的我打算将这些算法复习和整理一遍，所有算法代码采用Python编写。（数组下标从0开始） 冒泡排序冒泡排序应该是第一个学习的排序算法吧，在学习C语言时就会学到，虽然效率比较低，但是在某些不需要全部排">
-<meta property="og:updated_time" content="2019-02-03T07:16:46.095Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="常用排序算法总结">
-<meta name="twitter:description" content="排序算法非常的多，在学习数据结构和算法时肯定都会学习到关于排序的算法，虽然现在高级语言都自带内置的排序函数，但是理解一些常见排序算法的思想和适用场合也是非常重要的，这也是面试时的经典题目，所以准备找工作的我打算将这些算法复习和整理一遍，所有算法代码采用Python编写。（数组下标从0开始） 冒泡排序冒泡排序应该是第一个学习的排序算法吧，在学习C语言时就会学到，虽然效率比较低，但是在某些不需要全部排">
+<meta name="twitter:title" content="kunkun">
   
     <link rel="alternative" href="/atom.xml" title="kunkun" type="application/atom+xml">
   
@@ -164,371 +159,68 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-常用排序算法总结" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      常用排序算法总结
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/03/04/Java动态代理原理剖析-二-cglib/" class="archive-article-date">
+  	<time datetime="2019-03-04T06:08:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/03/04/Java动态代理原理剖析-二-cglib/">Java动态代理原理剖析(二)-cglib</a>
     </h1>
   
 
-        
-        <a href="/2018/05/29/常用排序算法总结/" class="archive-article-date">
-  	<time datetime="2018-05-29T10:59:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>排序算法非常的多，在学习数据结构和算法时肯定都会学习到关于排序的算法，虽然现在高级语言都自带内置的排序函数，但是理解一些常见排序算法的思想和适用场合也是非常重要的，这也是面试时的经典题目，所以准备找工作的我打算将这些算法复习和整理一遍，所有算法代码采用Python编写。（数组下标从0开始）</p>
-<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><p>冒泡排序应该是第一个学习的排序算法吧，在学习C语言时就会学到，虽然效率比较低，但是在某些不需要全部排序的情况下也是很有效的，比如只需找出前3大的元素时。<br><a id="more"></a></p>
-<h4 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h4><ol>
-<li><p>从第一个记录开始，相邻记录两两比较，若前一个记录大于后一个记录，则交换</p>
-</li>
-<li><p>第一趟将序列中最大的记录放到了最后一个位置</p>
-</li>
-<li><p>n个记录比较n-1趟</p>
-</li>
-</ol>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bubble_sort</span><span class="params">(lists)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(lists)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>, len(lists)-i<span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">if</span> lists[j] &gt; lists[j+<span class="number">1</span>]:</span><br><span class="line">                lists[j], lists[j+<span class="number">1</span>] = lists[j+<span class="number">1</span>], lists[j]</span><br></pre></td></tr></table></figure>
-<h4 id="优化冒泡代码"><a href="#优化冒泡代码" class="headerlink" title="优化冒泡代码"></a>优化冒泡代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bubble_sort</span><span class="params">(lists)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(lists)):</span><br><span class="line">        flag = <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>, len(lists)-i<span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">if</span> lists[j] &gt; lists[j+<span class="number">1</span>]:</span><br><span class="line">                flag = <span class="keyword">False</span></span><br><span class="line">                lists[j], lists[j+<span class="number">1</span>] = lists[j+<span class="number">1</span>], lists[j]</span><br><span class="line">        <span class="keyword">if</span> flag:</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-<h4 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h4><p>冒泡排序是稳定的，时间复杂度很容易就看出是O(n^2)，所以是一个比较慢的排序算法。优化的冒泡排序是设置一个标识符，当flag为真时说明没有发生交换，则后面都为有序的，可以直接跳出循环。</p>
-<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><p><strong>基本思想</strong>：序列大小为N,则共进行N-1趟排序，第一趟选出最小的与第一个元素交换，第二趟在剩余的无序序列中选出最小的与第二个元素交换，一直进行N-1趟。</p>
-<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">select_sort</span><span class="params">(lists)</span>:</span></span><br><span class="line">    length, i = len(lists), <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; length<span class="number">-1</span>:</span><br><span class="line">        min_temp = i</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>, length):</span><br><span class="line">            <span class="keyword">if</span> lists[j] &lt; lists[min_temp]:</span><br><span class="line">                min_temp = j</span><br><span class="line">        lists[i], lists[min_temp] = lists[min_temp], lists[i]</span><br><span class="line">        i += <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h4 id="算法分析-1"><a href="#算法分析-1" class="headerlink" title="算法分析"></a>算法分析</h4><p>时间复杂度O(n^2),算法是稳定的。选择排序与冒泡排序有点相似，每一轮排序结束时最大的元素将被放置到序列的一端，区别在于选择排序只交换一次，冒泡排序可能交换很多次。</p>
-<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><p>快速排序之所以叫快速排序，那当然是因为他快了~</p>
-<p><strong>基本思想</strong>：任取待排序对象序列中的某个对象v(枢轴，基准，支点)，按照该对象的关键字大小，将整个序列划分为左右两个子序列：</p>
-<ol>
-<li>左侧子序列中所有对象的关键字都小于或等于对象v的关键字；</li>
-<li>右侧子序列中所有对象的关键字都大于或等于对象v的关键字；</li>
-<li>对象v则排在这两个子序列中间(也是它最终的位置)</li>
-</ol>
-<p><strong>算法步骤</strong>：首先选取一个基准元素(pivot)，基准元素可以任意选择，将基准元素与第一个元素交换。令i指向第一个元素，j指向最后一个元素,首先从最后一个元素开始向前遍历序列，遇到比pivot小的元素时，将j指向的值赋值给i指向的位置；然后i加1，从i开始向后遍历，直到遇到比pivot大的元素，赋值给j指向的位置；然后开始移动j….算法一直重复直到i==j，将pivot的值赋值给j指向的位置。到这一步就将序列分成左右两部分，左边部分小于等于pivot，右边部分大于等于pivot，递归执行上述步骤直到左右序列长度都为1</p>
-<h3 id="讲解示例"><a href="#讲解示例" class="headerlink" title="讲解示例"></a>讲解示例</h3><p>有数组如下：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">0</th>
-<th style="text-align:center">1</th>
-<th style="text-align:center">2</th>
-<th style="text-align:center">3</th>
-<th style="text-align:center">4</th>
-<th style="text-align:center">5</th>
-<th style="text-align:center">6</th>
-<th style="text-align:center">7</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">30</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">87</td>
-<td style="text-align:center">25</td>
-<td style="text-align:center">49</td>
-<td style="text-align:center">50</td>
-<td style="text-align:center">22</td>
-<td style="text-align:center">12</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>令pivot = lists[0] = 30, i = 0, j = 7</p>
-</blockquote>
-<blockquote>
-<p>j=7时，lists[7]=12 &lt; pivot，lists[i]=lists[j]</p>
-</blockquote>
-<blockquote>
-<p>得到如下数组: [12, 2, 87, 25, 49, 50, 22, 12]</p>
-</blockquote>
-<blockquote>
-<p>i++, i=1时，lists[1]=2 &lt; pivot, i++</p>
-</blockquote>
-<blockquote>
-<p>i=2时, lists[2]=87 &gt; pivot, lists[j]=lists[i]</p>
-</blockquote>
-<blockquote>
-<p>得到如下数组：[12, 2, 87, 25, 49, 50, 22, 87]</p>
-</blockquote>
-<blockquote>
-<p>j–, j=6, lists[6]=22 &lt; pivot, lists[i]=lists[j]</p>
-</blockquote>
-<blockquote>
-<p>得到如下数组：[12, 2, 22, 25, 49, 50, 22, 87]</p>
-</blockquote>
-<blockquote>
-<p>i++, i=3时，lists[i]=25 &lt; pivot, i++</p>
-</blockquote>
-<blockquote>
-<p>i=4时, lists[i]=49 &gt; pivot, lists[j]=lists[i]</p>
-</blockquote>
-<blockquote>
-<p>得到如下数组: [12, 2, 22, 25, 49, 50, 49, 87]</p>
-</blockquote>
-<blockquote>
-<p>j–, j=5时，lists[j]=50 &gt; pivot, j–</p>
-</blockquote>
-<blockquote>
-<p>j=4时, j == i,lists[j]=pivot</p>
-</blockquote>
-<blockquote>
-<p>得到如下数组：[12, 2, 22, 25, 30, 50, 49, 87]</p>
-</blockquote>
-<h4 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">quick_sort</span><span class="params">(lists, left, right)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> left &lt; right:</span><br><span class="line">        i, j, pivot = left, right, lists[left]</span><br><span class="line">        <span class="keyword">while</span> i &lt; j:</span><br><span class="line">            <span class="keyword">while</span> i &lt; j:</span><br><span class="line">                <span class="keyword">if</span> lists[j] &lt; pivot:</span><br><span class="line">                    lists[i] = lists[j]</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                j -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> i &lt; j:</span><br><span class="line">                <span class="keyword">if</span> lists[i] &gt; pivot:</span><br><span class="line">                    lists[j] = lists[i]</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">        lists[j] = pivot</span><br><span class="line">        quick_sort(lists, left, j<span class="number">-1</span>)</span><br><span class="line">        quick_sort(lists, j+<span class="number">1</span>, right)</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line"><span class="comment">#### 算法分析</span></span><br><span class="line"></span><br><span class="line">快速排序在实际应用中有最好的运行速度，平均时间复杂度为O(nlogn)，但是最坏的情况下位O(n^<span class="number">2</span>)。至于为什么快速排序在时间复杂度为O(nlogn)的一些排序算法中速度最快，感兴趣的可以自己去查查资料。此外影响快速排序效率的关键就是Pivot的选择，常见的有取第一个，取最后一个，取前中后的中间数，pivot如果能正好将序列左右等分，那效率就是最高的。</span><br><span class="line"></span><br><span class="line"><span class="comment">## 插入排序</span></span><br><span class="line"></span><br><span class="line">插入排序有多种变形算法，我介绍一下直接插入排序、折半插入排序和希尔排序，前两种算法只在插入的时候有些区别，总体思想是一致的。</span><br><span class="line"></span><br><span class="line"><span class="comment">### 插入排序的思想</span></span><br><span class="line"></span><br><span class="line">&gt; <span class="number">1.</span> 一个记录是有序的</span><br><span class="line">&gt; <span class="number">1.</span> 从第二个记录开始，将每个记录插入到已排好序的序列中</span><br><span class="line">&gt; <span class="number">1.</span> 一直进行到第n个记录</span><br><span class="line"></span><br><span class="line"><span class="comment">### 直接插入排序</span></span><br><span class="line"></span><br><span class="line">直接插入排序第n次循环将下标为n的元素A插入合适的位置，将A依次与前一个元素B比较，若A&gt;=B,则A不动，进入下一次循环；若A&lt;B，则交换AB，重复上述操作。</span><br><span class="line"></span><br><span class="line"><span class="comment">#### 代码</span></span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">direct_insert_sort</span><span class="params">(lists)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(lists)):</span><br><span class="line">        <span class="keyword">if</span> lists[i] &gt;= lists[i<span class="number">-1</span>]:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        lists[i], lists[i<span class="number">-1</span>] = lists[i<span class="number">-1</span>], lists[i]</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i<span class="number">-1</span>, <span class="number">0</span>, <span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">if</span> lists[j] &gt;= lists[j<span class="number">-1</span>]:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            lists[j], lists[j<span class="number">-1</span>] = lists[j<span class="number">-1</span>], lists[j]</span><br></pre></td></tr></table></figure>
-<h4 id="算法分析-2"><a href="#算法分析-2" class="headerlink" title="算法分析"></a>算法分析</h4><ol>
-<li>直接插入排序是稳定排序算法</li>
-<li>时间复杂度：最好情况O(1),最坏O(n^2),平均O(n^2)</li>
-<li>空间复杂度O(1)</li>
-</ol>
-<h3 id="折半插入排序"><a href="#折半插入排序" class="headerlink" title="折半插入排序"></a>折半插入排序</h3><p>在插入排序中，第n次循环时，下标0到n-1的元素是有序的，可以用二分查找找到合适位置并插入第n个元素。</p>
-<h4 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">binary_insert_sort</span><span class="params">(lists)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(lists)):</span><br><span class="line">        <span class="keyword">if</span> lists[i] &gt;= lists[i<span class="number">-1</span>]:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="comment"># 折半查找</span></span><br><span class="line">        low, high = <span class="number">0</span>, i<span class="number">-1</span></span><br><span class="line">        <span class="keyword">while</span> low &lt;= high:</span><br><span class="line">            mid = (high + low) // <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> lists[mid] &gt; lists[i]:</span><br><span class="line">                high = mid - <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                low = mid + <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i, low, <span class="number">-1</span>):</span><br><span class="line">            lists[j], lists[j<span class="number">-1</span>] = lists[j<span class="number">-1</span>], lists[j]</span><br></pre></td></tr></table></figure>
-<h4 id="算法分析-3"><a href="#算法分析-3" class="headerlink" title="算法分析"></a>算法分析</h4><p>为什么用low下标作为最终位置呢？可以看while循环的条件是low&lt;=high，且是唯一跳出循环的条件，low与high只以1为增量，所以退出循环时low=high+1，但最后一次有效循环时，low与high与mid是相等的，如果lists[mid] &gt; lists[i],则这个元素应该在mid前面，也就是low前面，如果lists[mid] &lt;= lists[i]，则这个元素应该在mid后面，即low=mid+1这个位置。</p>
-<h3 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h3><p>希尔排序与直接插入算法大致过程是一样的，希尔排序需要进行多趟排序，先进行<strong>宏观</strong>排序，再进行<strong>微观</strong>排序。宏观调整指跳跃式的插入排序</p>
-<p>大致过程：</p>
-<ol>
-<li>将数组分为若干个子序列进行插入排序</li>
-</ol>
-<blockquote>
-<p>例如：将N个记录分成d个子序列<br>{R[1], R[1+d], R[1+2d] ….}<br>{R[2], R[2+d], R[2+2d] ….}<br>….<br>{R[d], R[d+d], R[d+2d] ….}</p>
-</blockquote>
-<ol start="2">
-<li>其中d为增量，他的值在排序过程中从大到小逐渐减少，最后一次排序变为1</li>
-</ol>
-<h4 id="代码-4"><a href="#代码-4" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">shell_insert_sort</span><span class="params">(lists, dlta)</span>:</span></span><br><span class="line">    <span class="comment"># para dlta: 增量d的序列，保证最后一个为1</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> dlta:</span><br><span class="line">        shell_insert(lists, k)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">shell_insert</span><span class="params">(lists, step)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(step):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i+step, len(lists), step):</span><br><span class="line">            <span class="keyword">if</span> lists[j] &gt;= lists[j-step]:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            lists[j], lists[j-step] = lists[j-step], lists[j]</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(j-step, i+step<span class="number">-1</span>, -step):</span><br><span class="line">                <span class="keyword">if</span> lists[j] &gt;= lists[j-step]:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                lists[j], lists[j-step] = lists[j-step], lists[j]</span><br></pre></td></tr></table></figure>
-<h4 id="算法分析-4"><a href="#算法分析-4" class="headerlink" title="算法分析"></a>算法分析</h4><p>希尔排序是不稳定的排序方法，即元素的相对顺序会改变。但是希尔排序的平均时间复杂度要比直接插入排序快一些，在O(n^1.3)与O(n^1.5)之间(来自教材)。希尔排序的优势在于减少了元素交换的次数，因为他可以以相对快的速度将大的数转移到数组的后面部分，取决于增量d的序列，因此增量d的序列的选择是算法效率好坏的关键。</p>
-<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><p><strong>基本思想</strong>：（1）将N个记录看成n个长度为1的有序子表（2）将两两相邻的有序子表进行归并，若子表个数为奇数，最后一个子表进入下一次归并（3）重复步骤（2），直到归并成一个长度为N的有序表</p>
-<h4 id="代码-5"><a href="#代码-5" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge_sort</span><span class="params">(lists)</span>:</span></span><br><span class="line">    step, length = <span class="number">1</span>, len(lists)</span><br><span class="line">    extend = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(length)]</span><br><span class="line">    <span class="keyword">while</span> step &lt; length*<span class="number">2</span>:</span><br><span class="line">        start = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> start &lt; length:</span><br><span class="line">            low, mid = start, min(start+step, length)</span><br><span class="line">            high, temp = min(start+step+step, length), low</span><br><span class="line">            start1, end1 = low, mid</span><br><span class="line">            start2, end2 = mid, high</span><br><span class="line">            <span class="keyword">while</span> start1 &lt; end1 <span class="keyword">and</span> start2 &lt; end2:</span><br><span class="line">                <span class="keyword">if</span> lists[start1] &lt; lists[start2]:</span><br><span class="line">                    extend[temp] = lists[start1]</span><br><span class="line">                    temp += <span class="number">1</span></span><br><span class="line">                    start1 += <span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    extend[temp] = lists[start2]</span><br><span class="line">                    temp += <span class="number">1</span></span><br><span class="line">                    start2 += <span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> start1 &lt; end1:</span><br><span class="line">                extend[temp] = lists[start1]</span><br><span class="line">                temp += <span class="number">1</span></span><br><span class="line">                start1 += <span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> start2 &lt; end2:</span><br><span class="line">                extend[temp] = lists[start2]</span><br><span class="line">                temp += <span class="number">1</span></span><br><span class="line">                start2 += <span class="number">1</span></span><br><span class="line">            start += <span class="number">2</span> * step</span><br><span class="line">        lists, extend = extend, lists</span><br><span class="line">        step += step</span><br></pre></td></tr></table></figure>
-<h4 id="算法分析-5"><a href="#算法分析-5" class="headerlink" title="算法分析"></a>算法分析</h4><p>归并排序有两种方式，一种自上而下，一种自下而上，我的示例代码为自下而上，也称为2路归并。归并排序是一个稳定的排序方法，每趟归并耗费O(n)的时间，归并趟数为logn，所以时间复杂度为O(nlogn)。但是也使用了额外的存储空间，空间复杂度为O(n)。</p>
-<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><p>堆排序属于选择排序，出发点是利用前一次比较的结果，减少比较次数。</p>
-<p>了解堆排序首先需要知道堆的定义，这里用到的堆是完全二叉树，分为小根堆和大根堆。其中最大堆满足如下条件</p>
-<ol>
-<li><p>父结点的值大于等于儿子结点</p>
-</li>
-<li><p>左右子树都是一个二叉堆</p>
-</li>
-</ol>
-<p>因为待排序的一般是序列，用序列表示如下：</p>
-<blockquote>
-<p>A[i] &gt;= A[2<em>i+1]<br>且 A[i] &gt; A[2</em>i+2]</p>
-</blockquote>
-<h4 id="堆排序需要解决两个问题"><a href="#堆排序需要解决两个问题" class="headerlink" title="堆排序需要解决两个问题"></a>堆排序需要解决两个问题</h4><ol>
-<li><p>由一个无序序列建成一个最大(小)堆</p>
-</li>
-<li><p>弹出堆顶元素，调整剩余元素成为新的堆</p>
-</li>
-</ol>
-<h4 id="算法步骤（大根堆）"><a href="#算法步骤（大根堆）" class="headerlink" title="算法步骤（大根堆）"></a>算法步骤（大根堆）</h4><ol>
-<li><p>建立大根堆</p>
-</li>
-<li><p>输出堆顶元素，即lists[0]与最后一个未排序的元素交换，第一次为最后一个，第二次为倒数第二个……</p>
-</li>
-<li><p>交换后，未排序的元素不再满足大根堆的特性，重新建堆</p>
-</li>
-<li><p>重复2.3两步，知道排序完成</p>
-</li>
-</ol>
-<h4 id="代码-6"><a href="#代码-6" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">heap_sort</span><span class="params">(lists)</span>:</span></span><br><span class="line">    length = len(lists)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(length//<span class="number">2</span><span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>):</span><br><span class="line">        max_heap_adjust(lists, i, length)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(length<span class="number">-1</span>, <span class="number">0</span>, <span class="number">-1</span>):</span><br><span class="line">        lists[<span class="number">0</span>], lists[i] = lists[i], lists[<span class="number">0</span>]</span><br><span class="line">        max_heap_adjust(lists, <span class="number">0</span>, i)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">max_heap_adjust</span><span class="params">(lists, start, end)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        imax, ileft, iright = start, <span class="number">2</span>*start+<span class="number">1</span>, <span class="number">2</span>*start+<span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> ileft &lt; end <span class="keyword">and</span> lists[start] &lt; lists[ileft]:</span><br><span class="line">            imax = ileft</span><br><span class="line">        <span class="keyword">if</span> iright &lt; end <span class="keyword">and</span> lists[imax] &lt; lists[iright]:</span><br><span class="line">            imax = iright</span><br><span class="line">        <span class="keyword">if</span> imax == start:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        lists[start], lists[imax] = lists[imax], lists[start]</span><br><span class="line">        start = imax</span><br></pre></td></tr></table></figure>
-<h4 id="算法分析-6"><a href="#算法分析-6" class="headerlink" title="算法分析"></a>算法分析</h4><p>堆排序是不稳定的排序，时间复杂度为O(nlogn)。且最慢情况下也为O(nlogn)。</p>
-<p>这个算法需要对二叉树的一些特性有了解，不然边界情况很容易糊涂了，我自己写代码的时候少了一次循环，改来改去没发现，总觉得是对的，浪费了挺久时间。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>有些排序代码一下子写出来还是比较难的，但是算法更重要的是理解吧，毕竟写的这些排序算法也不太用的到,而且同样的思想和步骤也能写出不一样的代码，也会影响排序的快慢，开头也提到过了，高级语言的库里一般都自带排序算法，且速度更快，所以理解透彻就行了。下面我简单的以我写的代码测一下三个O(nlogn)时间复杂度的算法和Python内置sort()的速度快慢。序列全部random产生，同一组测试为同一个序列。</p>
-<h3 id="10000个元素"><a href="#10000个元素" class="headerlink" title="10000个元素"></a>10000个元素</h3><blockquote>
-<p><function merge_sort="" at="" 0x00000245ec6aa9d8=""> costs :  0.03701162338256836</function></p>
-<p><function quick_sort="" at="" 0x00000245ec6aac80=""> costs :  0.025029897689819336</function></p>
-<p><function heap_sort="" at="" 0x00000245ec6aaae8=""> costs :  0.05319356918334961</function></p>
-<p><function python_sort="" at="" 0x00000245ec6aae18=""> costs :  0.002984762191772461</function></p>
-</blockquote>
-<h3 id="50000个元素"><a href="#50000个元素" class="headerlink" title="50000个元素"></a>50000个元素</h3><blockquote>
-<p><function merge_sort="" at="" 0x000002523ecca9d8=""> costs :  0.21823906898498535</function></p>
-<p><function quick_sort="" at="" 0x000002523eccac80=""> costs :  0.1542985439300537</function></p>
-<p><function heap_sort="" at="" 0x000002523eccaae8=""> costs :  0.3872966766357422</function></p>
-<p><function python_sort="" at="" 0x000002523eccae18=""> costs :  0.016024351119995117</function></p>
-</blockquote>
-<h3 id="100000个元素"><a href="#100000个元素" class="headerlink" title="100000个元素"></a>100000个元素</h3><blockquote>
-<p><function merge_sort="" at="" 0x0000023023fba9d8=""> costs :  0.4917008876800537</function></p>
-<p><function quick_sort="" at="" 0x0000023023fbac80=""> costs :  0.3395521640777588</function></p>
-<p><function heap_sort="" at="" 0x0000023023fbaae8=""> costs :  0.7686326503753662</function></p>
-<p><function python_sort="" at="" 0x0000023023fbae18=""> costs :  0.03353142738342285</function></p>
-</blockquote>
-<p>可以看出python自带的排序sort()方法是远远快于我写的排序算法的。。。。不过快排确实是NlogN级别算法中速度最快的。</p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>thanks<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/zhifubao.jpg">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/wechat.jpg">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/05/29/常用排序算法总结/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2018/05/29/建站/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          建站
-        
-      </div>
-    </a>
   
   
-    <a href="/2018/05/29/Python装饰器-decorator/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Python装饰器(decorator)</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-        <div class="toc-container tooltip-left">
-            <i class="icon-font icon-category"></i>
-            <div class="tooltip tooltip-east">
-                <span class="tooltip-item">
-                </span>
-                <span class="tooltip-content">
-                    <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#冒泡排序"><span class="toc-number">1.</span> <span class="toc-text">冒泡排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#算法描述"><span class="toc-number">1.0.1.</span> <span class="toc-text">算法描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码"><span class="toc-number">1.0.2.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优化冒泡代码"><span class="toc-number">1.0.3.</span> <span class="toc-text">优化冒泡代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法分析"><span class="toc-number">1.0.4.</span> <span class="toc-text">算法分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#选择排序"><span class="toc-number">2.</span> <span class="toc-text">选择排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#代码-1"><span class="toc-number">2.0.1.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法分析-1"><span class="toc-number">2.0.2.</span> <span class="toc-text">算法分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#快速排序"><span class="toc-number">3.</span> <span class="toc-text">快速排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#讲解示例"><span class="toc-number">3.1.</span> <span class="toc-text">讲解示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#代码-2"><span class="toc-number">3.1.1.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法分析-2"><span class="toc-number">3.1.2.</span> <span class="toc-text">算法分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#折半插入排序"><span class="toc-number">3.2.</span> <span class="toc-text">折半插入排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#代码-3"><span class="toc-number">3.2.1.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法分析-3"><span class="toc-number">3.2.2.</span> <span class="toc-text">算法分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#希尔排序"><span class="toc-number">3.3.</span> <span class="toc-text">希尔排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#代码-4"><span class="toc-number">3.3.1.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法分析-4"><span class="toc-number">3.3.2.</span> <span class="toc-text">算法分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#归并排序"><span class="toc-number">4.</span> <span class="toc-text">归并排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#代码-5"><span class="toc-number">4.0.1.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法分析-5"><span class="toc-number">4.0.2.</span> <span class="toc-text">算法分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#堆排序"><span class="toc-number">5.</span> <span class="toc-text">堆排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#堆排序需要解决两个问题"><span class="toc-number">5.0.1.</span> <span class="toc-text">堆排序需要解决两个问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法步骤（大根堆）"><span class="toc-number">5.0.2.</span> <span class="toc-text">算法步骤（大根堆）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码-6"><span class="toc-number">5.0.3.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法分析-6"><span class="toc-number">5.0.4.</span> <span class="toc-text">算法分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10000个元素"><span class="toc-number">6.1.</span> <span class="toc-text">10000个元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#50000个元素"><span class="toc-number">6.2.</span> <span class="toc-text">50000个元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#100000个元素"><span class="toc-number">6.3.</span> <span class="toc-text">100000个元素</span></a></li></ol></li></ol>
-                    </div>
-                </span>
-            </div>
-        </div>
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -551,8 +243,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
