@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="kunkun">
 <meta property="og:description" content="前面一篇文章Java动态代理原理剖析(一)分析了JDK版本的动态代理实现，但是它有一个缺陷，生成的代理类会继承Proxy类，而Java是单继承，所以无法对一个没有实现接口的类做代理。 而这篇文章将要介绍的cglib将会解决这个问题。cglib是一个第三方依赖，根据cglib的wiki描述，它是一个有力的、高性能的、高质量的代码生成库，被用来在运行时继承JAVA类或实现接口。 如何使用cglib前一">
 <meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/wechat.jpg">
-<meta property="og:updated_time" content="2019-03-23T13:50:48.885Z">
+<meta property="og:updated_time" content="2019-05-02T06:31:29.134Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java动态代理原理剖析(二)-cglib">
 <meta name="twitter:description" content="前面一篇文章Java动态代理原理剖析(一)分析了JDK版本的动态代理实现，但是它有一个缺陷，生成的代理类会继承Proxy类，而Java是单继承，所以无法对一个没有实现接口的类做代理。 而这篇文章将要介绍的cglib将会解决这个问题。cglib是一个第三方依赖，根据cglib的wiki描述，它是一个有力的、高性能的、高质量的代码生成库，被用来在运行时继承JAVA类或实现接口。 如何使用cglib前一">
@@ -481,11 +481,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color2">Java源码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -497,11 +505,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java源码</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -514,10 +518,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
             
             <div class="clearfix"></div>
