@@ -161,6 +161,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Java阻塞队列源码-2-LinkedBlockingQueue" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/">Java阻塞队列源码(2)-LinkedBlockingQueue</a>
+    </h1>
+  
+
+        
+        <a href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/" class="archive-article-date">
+  	<time datetime="2019-07-03T09:11:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在系列的第一篇中介绍了<code>ArrayBlockingQueue</code>的源码实现，用数组实现了阻塞队列，作为系列的第二篇，将分析<code>LinkedBlockingQueue</code>的源码。基于链表的队列与基于数组的队列相比，基于链表的数据结构将提供更大的容量，但是随机读写的性能会低于按下标访问的速度，这些由于底层存储元素的数据结构不同导致的性能差异在两种<code>List</code>的实现中也体现了出来。</p>
+<h3 id="构造函数与成员变量"><a href="#构造函数与成员变量" class="headerlink" title="构造函数与成员变量"></a>构造函数与成员变量</h3><p>首先看下<code>LinkedBlockingQueue</code>类的继承关系,与<code>ArrayBlockingQueue</code>的继承关系一致,<code>AbstractQueue</code>是一个抽象类，用模板方法设计模式封装了几个简单的方法，具体的方法实现在实现类中。<code>BlockingQueue</code>接口则定义了阻塞队列的通用方法，在系列第一篇文章中介绍过，不再分析。</p>
+        
+          <a class="article-more-a" href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Java阻塞队列源码(1)-ArrayBlockingQueue" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -903,83 +984,6 @@
 
 
   
-    <article id="post-再见，2018" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/01/再见，2018/">再见，2018</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/01/再见，2018/" class="archive-article-date">
-  	<time datetime="2019-01-01T03:46:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>前段时间忙着秋招和实习，好久没有更新博客了。在这辞旧迎新的一天，总结一下过去的2018，展望2019，立一些<code>flag</code>。同时作为新开公众号的第一篇文章，欢迎关注！（Technique and Life)</p>
-<h2 id="2018"><a href="#2018" class="headerlink" title="2018"></a>2018</h2><h3 id="校招-Python-Vs-Java"><a href="#校招-Python-Vs-Java" class="headerlink" title="校招:Python Vs Java"></a>校招:Python Vs Java</h3><p>简单介绍下背景，垫底985计算机本科。2018上半年是大四上学期，忙着春招找实习，python出身的我找实习屡屡碰壁，大厂的职位还是以Java和Cpp为主，即使说着<code>应届生不看重语言</code>，面试确总想着问Java基础，不会的话，面试是很难通过的。因为大多数科班出身的，计算机相关的基础知识都是比较扎实的，那么同等情况一个合适技术栈的应届生显然更加具有吸引力。好在还有一个<code>头条</code>招Python岗位的后台开发，运气不错，最终拿到实习Offer。</p>
-        
-          <a class="article-more-a" href="/2019/01/01/再见，2018/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/01/再见，2018/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1089,14 +1093,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
@@ -1109,7 +1105,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
             
             <div class="clearfix"></div>
