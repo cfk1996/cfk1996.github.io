@@ -6,14 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>kunkun</title>
+  <title>跳表-ConcurrentSkipListMap走马观花 | kunkun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="kunkun">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="跳表（跳跃表）是一种数据结构，改进自链表，用于存储有序的数据，跳跃表通过空间换时间的方法来提高数据检索的速度。早些在学校的数据结构课程中并没有接触过跳表。第一次接触是在了解Redis的有序集合的底层实现的时候，毕竟Redis的五种数据结构是面试中的常见题，即使没有实际使用过，也需要提前去了解一下。 但是最近在工作中不一样了，由于是从事游戏开发，经常会有排行榜的需求需要实现，而这大多数通过跳表来实现">
+<meta name="keywords" content="Java,Java源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="跳表-ConcurrentSkipListMap走马观花">
+<meta property="og:url" content="http://yoursite.com/2019/09/08/跳表-ConcurrentSkipListMap走马观花/index.html">
 <meta property="og:site_name" content="kunkun">
+<meta property="og:description" content="跳表（跳跃表）是一种数据结构，改进自链表，用于存储有序的数据，跳跃表通过空间换时间的方法来提高数据检索的速度。早些在学校的数据结构课程中并没有接触过跳表。第一次接触是在了解Redis的有序集合的底层实现的时候，毕竟Redis的五种数据结构是面试中的常见题，即使没有实际使用过，也需要提前去了解一下。 但是最近在工作中不一样了，由于是从事游戏开发，经常会有排行榜的需求需要实现，而这大多数通过跳表来实现">
+<meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/skiplist.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/screen1.png">
+<meta property="og:updated_time" content="2019-09-11T14:14:02.459Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kunkun">
+<meta name="twitter:title" content="跳表-ConcurrentSkipListMap走马观花">
+<meta name="twitter:description" content="跳表（跳跃表）是一种数据结构，改进自链表，用于存储有序的数据，跳跃表通过空间换时间的方法来提高数据检索的速度。早些在学校的数据结构课程中并没有接触过跳表。第一次接触是在了解Redis的有序集合的底层实现的时候，毕竟Redis的五种数据结构是面试中的常见题，即使没有实际使用过，也需要提前去了解一下。 但是最近在工作中不一样了，由于是从事游戏开发，经常会有排行榜的需求需要实现，而这大多数通过跳表来实现">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/skiplist.png">
   
     <link rel="alternative" href="/atom.xml" title="kunkun" type="application/atom+xml">
   
@@ -159,16 +167,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-跳表-ConcurrentSkipListMap走马观花" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-跳表-ConcurrentSkipListMap走马观花" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/08/跳表-ConcurrentSkipListMap走马观花/">跳表-ConcurrentSkipListMap走马观花</a>
+    <h1 class="article-title" itemprop="name">
+      跳表-ConcurrentSkipListMap走马观花
     </h1>
   
 
@@ -184,11 +190,71 @@
         <p>跳表（跳跃表）是一种数据结构，改进自链表，用于存储有序的数据，跳跃表通过空间换时间的方法来提高数据检索的速度。早些在学校的数据结构课程中并没有接触过跳表。第一次接触是在了解Redis的有序集合的底层实现的时候，毕竟Redis的五种数据结构是面试中的常见题，即使没有实际使用过，也需要提前去了解一下。</p>
 <p>但是最近在工作中不一样了，由于是从事游戏开发，经常会有排行榜的需求需要实现，而这大多数通过跳表来实现，所以有必要来深入了解一下跳表并简略的阅读一下<code>ConcurrentSkipListMap</code>的源码。前面也提到了Redis中的有序集合底层就是跳表，所以其也是开发排行榜功能时可以考虑使用的。有时候呢，我们需要排序的东西不需要持久化或者为了更高的效率，是直接在内存中进行排序，毕竟访问redis是有网络io开销的，那么使用到的数据结构就是jdk中的<code>ConcurrentSkipListMap</code>（支持同步）或者<code>TreeMap</code>（不支持同步，性能更好）.</p>
 <p>不过这次源码重点在于跳跃表，不在于并发的控制。</p>
-        
-          <a class="article-more-a" href="/2019/09/08/跳表-ConcurrentSkipListMap走马观花/#more">more >></a>
-        
+<a id="more"></a>
+<h3 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h3><p>通过上面的介绍，我们了解到跳跃表的应用场景大概是这样的:</p>
+<ol>
+<li>有序</li>
+<li>频繁插入删除</li>
+<li>频繁的查找</li>
+</ol>
+<p>对于有序来说，数组和普通链表都可以通过排序算法来实现，在排序复杂度上不相上下。链表在插入和删除上性能较好，数组在查找上性能较好，所以都不能满足我们的要求。跳跃表则是在插入删除和查找的性能上做了折中，复杂度为log(n)。</p>
+<p>跳表结构如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/skiplist.png" alt="跳跃表"></p>
+<p>为了更好的支持插入和删除，所以采用链表的形式，可以看到图片中最下面一行是一个有序的链表。但如果只是一个单一的链表，查找时复杂度为O(n)，性能太差。如何优化呢？</p>
+<p>在有序数组中，我们查找时用的是二分查找，一次查找可以排除一半元素的遍历。在数组中之所以可以用二分查找，是因为我们能够快速的以O(1)的复杂度定位到中间的位置，但是链表只能是O(N)。所以跳跃表采取空间换时间的方式，既然你找不到中间点，或者三分之一点等中间位置，那么我可以通过多增加一个节点来指向中间位置，这样你也能够快速的定位到中间的位置，然后一定程度的减少你遍历元素的个数，提高效率。图中有多层，相邻的两层，采用的都是这样的思想。</p>
+<p>这个图一目了然，很容易就可以让大家了解跳表的思想。至于我们应该添加多少层额外的链表，给什么位置的节点添加索引才能更好的优化检索和插入的效率，就是我希望通过阅读源码找寻的.</p>
+<h3 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h3><p>通过上图，可以发现有两种节点类型，第一种是最下层的，与普通链表相似，第二种是除了最后一层以外的其他索引层节点，有两个指针。<br>但是在jdk源码中还存在一种节点，是索引层的头节点，还维护了其层数信息，下面先给出源码注释中的跳表样例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">* Head nodes          Index nodes</span><br><span class="line">* +-+    right        +-+                      +-+</span><br><span class="line">* |2|----------------&gt;| |---------------------&gt;| |-&gt;null</span><br><span class="line">* +-+                 +-+                      +-+</span><br><span class="line">*  | down              |                        |</span><br><span class="line">*  v                   v                        v</span><br><span class="line">* +-+            +-+  +-+       +-+            +-+       +-+</span><br><span class="line">* |1|-----------&gt;| |-&gt;| |------&gt;| |-----------&gt;| |------&gt;| |-&gt;null</span><br><span class="line">* +-+            +-+  +-+       +-+            +-+       +-+</span><br><span class="line">*  v              |    |         |              |         |</span><br><span class="line">* Nodes  next     v    v         v              v         v</span><br><span class="line">* +-+  +-+  +-+  +-+  +-+  +-+  +-+  +-+  +-+  +-+  +-+  +-+</span><br><span class="line">* | |-&gt;|A|-&gt;|B|-&gt;|C|-&gt;|D|-&gt;|E|-&gt;|F|-&gt;|G|-&gt;|H|-&gt;|I|-&gt;|J|-&gt;|K|-&gt;null</span><br><span class="line">* +-+  +-+  +-+  +-+  +-+  +-+  +-+  +-+  +-+  +-+  +-+  +-+</span><br><span class="line">*</span><br></pre></td></tr></table></figure>
+<p>接着我们来分别看下它们在源码中是如何定义的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 记住了，只关注跳表，不去关注并发！！！水平有限，不误导大家</span></span><br><span class="line"><span class="comment">// Node是最底层的链表的节点，包括键值对和指向下一个节点的指针</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    <span class="keyword">volatile</span> Object value;</span><br><span class="line">    <span class="keyword">volatile</span> Node&lt;K,V&gt; next;</span><br><span class="line"><span class="comment">// 至于为什么需要两个构造函数，后面源码会有解释</span></span><br><span class="line">    Node(K key, Object value, Node&lt;K,V&gt; next) &#123;</span><br><span class="line">        <span class="keyword">this</span>.key = key;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line">    Node(Node&lt;K,V&gt; next) &#123;</span><br><span class="line">        <span class="keyword">this</span>.key = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">this</span>.value = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...配套method</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 索引节点结构</span></span><br><span class="line"><span class="comment">// 存储了两个指针，分别指向右边和下边的节点</span></span><br><span class="line"><span class="comment">// 索引节点的value为链表节点</span></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Index</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Node&lt;K,V&gt; node;</span><br><span class="line">    <span class="keyword">final</span> Index&lt;K,V&gt; down;</span><br><span class="line">    <span class="keyword">volatile</span> Index&lt;K,V&gt; right;</span><br><span class="line"></span><br><span class="line">    Index(Node&lt;K,V&gt; node, Index&lt;K,V&gt; down, Index&lt;K,V&gt; right) &#123;</span><br><span class="line">        <span class="keyword">this</span>.node = node;</span><br><span class="line">        <span class="keyword">this</span>.down = down;</span><br><span class="line">        <span class="keyword">this</span>.right = right;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...配套method</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 索引层的头节点结构</span></span><br><span class="line"><span class="comment">// 在索引节点的基础上添加了表示层数的level变量</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadIndex</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">Index</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> level;</span><br><span class="line">    HeadIndex(Node&lt;K,V&gt; node, Index&lt;K,V&gt; down, Index&lt;K,V&gt; right, <span class="keyword">int</span> level) &#123;</span><br><span class="line">        <span class="keyword">super</span>(node, down, right);</span><br><span class="line">        <span class="keyword">this</span>.level = level;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="源码阅读小技巧"><a href="#源码阅读小技巧" class="headerlink" title="源码阅读小技巧"></a>源码阅读小技巧</h3><p>JDK中集合包下的代码，一个集合差不多有几千行，想要从上往下逐行看完是不现实的，需要能快速的定位到我们想看的方法。如果是<code>HashMap</code>这种常用的数据结构，我们经常使用，对它有哪些方法非常的了解，就可以通过搜索方法名字来定位代码的位置。但是像今天这种<code>ConcurrentSkipListMap</code>比较不常用的类，在不了解它大多数方法的时候，可以通过idea提供的功能帮我们快速定位。打开下图中的<code>show members</code>就可以让类现实它所有的方法和内部类，就可以靠猜名字快速定位到源码的位置。</p>
+<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/screen1.png" alt="idea技巧"></p>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>了解完内部链表节点的实现情况，现在按照老规矩，从构造函数开始阅读源码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Compartor接口用来指定key的排序规则</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ConcurrentSkipListMap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.comparator = <span class="keyword">null</span>;</span><br><span class="line">    initialize();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ConcurrentSkipListMap</span><span class="params">(Comparator&lt;? <span class="keyword">super</span> K&gt; comparator)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.comparator = comparator;</span><br><span class="line">    initialize();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 还有两个传入map和sortedMap的构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    keySet = <span class="keyword">null</span>;<span class="comment">// 内部类</span></span><br><span class="line">    entrySet = <span class="keyword">null</span>;<span class="comment">// 内部类</span></span><br><span class="line">    values = <span class="keyword">null</span>;<span class="comment">// 内部类</span></span><br><span class="line">    descendingMap = <span class="keyword">null</span>;<span class="comment">// 内部类</span></span><br><span class="line"><span class="comment">// private static final Object BASE_HEADER = new Object();</span></span><br><span class="line"><span class="comment">// 从注释给出的图来看，这个head应该是一直处于第一层的头节点</span></span><br><span class="line">    head = <span class="keyword">new</span> HeadIndex&lt;K,V&gt;(<span class="keyword">new</span> Node&lt;K,V&gt;(<span class="keyword">null</span>, BASE_HEADER, <span class="keyword">null</span>),</span><br><span class="line">                              <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>构造函数好像没啥，那么接着往下看吧</p>
+<h3 id="put"><a href="#put" class="headerlink" title="put()"></a>put()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 与一般的map一样，通过put插入键值对，，key，value不能为空</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="keyword">return</span> doPut(key, value, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// doPut</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> V <span class="title">doPut</span><span class="params">(K key, V value, <span class="keyword">boolean</span> onlyIfAbsent)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt; z;   <span class="comment">// 要被添加的Node</span></span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="comment">// key的比较方法</span></span><br><span class="line">    Comparator&lt;? <span class="keyword">super</span> K&gt; cmp = comparator;</span><br><span class="line">    outer: <span class="keyword">for</span> (;;) &#123; <span class="comment">// 因为cas操作可能失败，套了个无限循环</span></span><br><span class="line">    <span class="comment">// findPrecessor返回小于key但最接近key的节点，不存在则为链表的头节点，下面也会介绍</span></span><br><span class="line">        <span class="keyword">for</span> (Node&lt;K,V&gt; b = findPredecessor(key, cmp), n = b.next;;) &#123;</span><br><span class="line">            <span class="keyword">if</span> (n != <span class="keyword">null</span>) &#123;</span><br><span class="line">                Object v; <span class="keyword">int</span> c;</span><br><span class="line">                Node&lt;K,V&gt; f = n.next;</span><br><span class="line">                <span class="comment">// b---&gt;n---&gt;f</span></span><br><span class="line">                <span class="keyword">if</span> (n != b.next)</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span> ((v = n.value) == <span class="keyword">null</span>) &#123;   <span class="comment">// n is deleted</span></span><br><span class="line">                <span class="comment">// 简单来说就是b.next = f，但是考虑了cas</span></span><br><span class="line">                    n.helpDelete(b, f);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (b.value == <span class="keyword">null</span> || v == n) <span class="comment">// b is deleted</span></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="comment">// 如果key大于n.key</span></span><br><span class="line">                <span class="keyword">if</span> ((c = cpr(cmp, key, n.key)) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// 说明有并发插入，继续向后遍历一个节点</span></span><br><span class="line">                    b = n;</span><br><span class="line">                    n = f;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 如果key相等</span></span><br><span class="line">                <span class="keyword">if</span> (c == <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="comment">// 没有指定putIfAbsent的话，通过cas替换value并返回新的value</span></span><br><span class="line">                    <span class="comment">// 指定了putIfabsent则返回原有value值</span></span><br><span class="line">                    <span class="keyword">if</span> (onlyIfAbsent || n.casValue(v, value)) &#123;</span><br><span class="line">                        <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>) V vv = (V)v;</span><br><span class="line">                        <span class="keyword">return</span> vv;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>; <span class="comment">//cas失败，重试</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// else c &lt; 0;则位置正确，插入就行</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 创建新的Node节点</span></span><br><span class="line">            z = <span class="keyword">new</span> Node&lt;K,V&gt;(key, value, n);</span><br><span class="line">            <span class="comment">// 更新链表b-&gt;n-&gt;f ==&gt; b-&gt;z-&gt;n-&gt;f</span></span><br><span class="line">            <span class="keyword">if</span> (!b.casNext(n, z))</span><br><span class="line">                <span class="keyword">break</span>;     </span><br><span class="line">            <span class="keyword">break</span> outer;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> rnd = ThreadLocalRandom.nextSecondarySeed();</span><br><span class="line">    <span class="comment">// 0x80000001转换为二进制1000...0001</span></span><br><span class="line">    <span class="comment">// 看起来似乎添加层数是有一定随机性的</span></span><br><span class="line">    <span class="comment">// rnd为0xxx...xxx0时可以进入</span></span><br><span class="line">    <span class="keyword">if</span> ((rnd &amp; <span class="number">0x80000001</span>) == <span class="number">0</span>) &#123; </span><br><span class="line">        <span class="keyword">int</span> level = <span class="number">1</span>, max;</span><br><span class="line">        <span class="comment">// 有多少个1，level递增多少次</span></span><br><span class="line">        <span class="keyword">while</span> (((rnd &gt;&gt;&gt;= <span class="number">1</span>) &amp; <span class="number">1</span>) != <span class="number">0</span>)</span><br><span class="line">            ++level;</span><br><span class="line">        Index&lt;K,V&gt; idx = <span class="keyword">null</span>;</span><br><span class="line">        HeadIndex&lt;K,V&gt; h = head;</span><br><span class="line">        <span class="keyword">if</span> (level &lt;= (max = h.level)) &#123;</span><br><span class="line">        <span class="comment">// 如果level比现在的层数小，则在新增加的节点z上</span></span><br><span class="line">        <span class="comment">// 建立level个索引节点，忘记了可以回上面看看索引节点和其他节点区别</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= level; ++i)</span><br><span class="line">                idx = <span class="keyword">new</span> Index&lt;K,V&gt;(z, idx, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果level大于层数，则level设为层数+1</span></span><br><span class="line">            level = max + <span class="number">1</span>; </span><br><span class="line">            <span class="comment">// 构造索引节点数组</span></span><br><span class="line">            <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)Index&lt;K,V&gt;[] idxs =</span><br><span class="line">                (Index&lt;K,V&gt;[])<span class="keyword">new</span> Index&lt;?,?&gt;[level+<span class="number">1</span>];</span><br><span class="line">            <span class="comment">//为新建的节点z创造level个索引节点</span></span><br><span class="line">            <span class="comment">//下标从1开始</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= level; ++i)</span><br><span class="line">                idxs[i] = idx = <span class="keyword">new</span> Index&lt;K,V&gt;(z, idx, <span class="keyword">null</span>);</span><br><span class="line">            <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">                h = head;</span><br><span class="line">                <span class="keyword">int</span> oldLevel = h.level;</span><br><span class="line">            <span class="comment">//用于判断并发修改，不考虑</span></span><br><span class="line">            <span class="comment">//正确情况下该分支的level&gt;当前层数</span></span><br><span class="line">                <span class="keyword">if</span> (level &lt;= oldLevel) <span class="comment">// lost race to add level</span></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                HeadIndex&lt;K,V&gt; newh = h;</span><br><span class="line">                Node&lt;K,V&gt; oldbase = h.node;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = oldLevel+<span class="number">1</span>; j &lt;= level; ++j)</span><br><span class="line">                <span class="comment">//为每层生成一个headIndex</span></span><br><span class="line">                    newh = <span class="keyword">new</span> HeadIndex&lt;K,V&gt;(oldbase, newh, idxs[j], j);</span><br><span class="line">                <span class="comment">//更新最上层的headIndex指针</span></span><br><span class="line">                <span class="keyword">if</span> (casHead(h, newh)) &#123;</span><br><span class="line">                    h = newh;</span><br><span class="line">                    idx = idxs[level = oldLevel];</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        splice: <span class="keyword">for</span> (<span class="keyword">int</span> insertionLevel = level;;) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = h.level;</span><br><span class="line">            <span class="comment">// h为最新的头节点</span></span><br><span class="line">            <span class="keyword">for</span> (Index&lt;K,V&gt; q = h, r = q.right, t = idx;;) &#123;</span><br><span class="line">                <span class="keyword">if</span> (q == <span class="keyword">null</span> || t == <span class="keyword">null</span>)</span><br><span class="line">                    <span class="keyword">break</span> splice;</span><br><span class="line">                <span class="comment">// r为前面的idxs[x]</span></span><br><span class="line">                <span class="keyword">if</span> (r != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    Node&lt;K,V&gt; n = r.node;</span><br><span class="line">        <span class="comment">// compare before deletion check avoids needing recheck</span></span><br><span class="line">                    <span class="keyword">int</span> c = cpr(cmp, key, n.key);</span><br><span class="line">                    <span class="keyword">if</span> (n.value == <span class="keyword">null</span>) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (!q.unlink(r))</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        r = q.right;</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                <span class="comment">// 没并发的情况下，idxs数组里都是新增的key</span></span><br><span class="line">                <span class="comment">// c应该=0</span></span><br><span class="line">                    <span class="keyword">if</span> (c &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        q = r;</span><br><span class="line">                        r = r.right;</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            <span class="comment">// j开始时为新跳表层数</span></span><br><span class="line">            <span class="comment">//insertionLevel为旧跳表，经过后面的几个j--才会进入该分支</span></span><br><span class="line">                <span class="keyword">if</span> (j == insertionLevel) &#123;</span><br><span class="line">                    <span class="comment">//将t插入q,r之间</span></span><br><span class="line">                    <span class="keyword">if</span> (!q.link(r, t))</span><br><span class="line">                        <span class="keyword">break</span>; <span class="comment">// restart</span></span><br><span class="line">                    <span class="keyword">if</span> (t.node.value == <span class="keyword">null</span>) &#123;</span><br><span class="line">                        findNode(key);</span><br><span class="line">                        <span class="keyword">break</span> splice;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (--insertionLevel == <span class="number">0</span>)</span><br><span class="line">                        <span class="keyword">break</span> splice;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (--j &gt;= insertionLevel &amp;&amp; j &lt; level)</span><br><span class="line">                    t = t.down;</span><br><span class="line">            <span class="comment">//向下一层</span></span><br><span class="line">                q = q.down;</span><br><span class="line">                r = q.right;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// findPredecessor</span></span><br><span class="line"><span class="comment">// 回想一下前面那个跳表的结构，该方法就是根据key，先从head往右找，然后往下找</span></span><br><span class="line"><span class="comment">//然后再往右再往下，知道找到比key小的节点</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node&lt;K,V&gt; <span class="title">findPredecessor</span><span class="params">(Object key, Comparator&lt;? <span class="keyword">super</span> K&gt; cmp)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="keyword">for</span> (Index&lt;K,V&gt; q = head, r = q.right, d;;) &#123;</span><br><span class="line">        <span class="comment">// 从head头节点点向后遍历</span></span><br><span class="line">            <span class="keyword">if</span> (r != <span class="keyword">null</span>) &#123;</span><br><span class="line">                Node&lt;K,V&gt; n = r.node;</span><br><span class="line">                K k = n.key;</span><br><span class="line">                <span class="comment">//说明被删除了，更新q.next</span></span><br><span class="line">                <span class="keyword">if</span> (n.value == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (!q.unlink(r))</span><br><span class="line">                        <span class="keyword">break</span>;           <span class="comment">// restart</span></span><br><span class="line">                    r = q.right;         <span class="comment">// reread r</span></span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (cpr(cmp, key, k) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    q = r;</span><br><span class="line">                    r = r.right;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 失败了就从下一层开始</span></span><br><span class="line">            <span class="keyword">if</span> ((d = q.down) == <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">return</span> q.node;</span><br><span class="line">            q = d;</span><br><span class="line">            r = d.right;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>put函数介绍完了，最后一段更新跳表的操作还是有些乱和难以理解…</p>
+<h3 id="get"><a href="#get" class="headerlink" title="get()"></a>get()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> doGet(key);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> V <span class="title">doGet</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    Comparator&lt;? <span class="keyword">super</span> K&gt; cmp = comparator;</span><br><span class="line">    outer: <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="comment">//findPredecessor找到离key最近的，小于key的node</span></span><br><span class="line">        <span class="comment">// 没有并发的情况下，要么是n，要么没有要找的key</span></span><br><span class="line">        <span class="keyword">for</span> (Node&lt;K,V&gt; b = findPredecessor(key, cmp), n = b.next;;) &#123;</span><br><span class="line">            Object v; <span class="keyword">int</span> c;</span><br><span class="line">            <span class="keyword">if</span> (n == <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">break</span> outer;</span><br><span class="line">            Node&lt;K,V&gt; f = n.next;</span><br><span class="line">            <span class="keyword">if</span> (n != b.next)                <span class="comment">// inconsistent read</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">if</span> ((v = n.value) == <span class="keyword">null</span>) &#123;    <span class="comment">// n is deleted</span></span><br><span class="line">                n.helpDelete(b, f);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (b.value == <span class="keyword">null</span> || v == n)  <span class="comment">// b is deleted</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="comment">//key与n.key相同</span></span><br><span class="line">            <span class="keyword">if</span> ((c = cpr(cmp, key, n.key)) == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>) V vv = (V)v;</span><br><span class="line">                <span class="keyword">return</span> vv;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (c &lt; <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">break</span> outer;</span><br><span class="line">            <span class="comment">//并发导致key&gt;n.key，说明findPredecessor找的位置不对</span></span><br><span class="line">            <span class="comment">//往后位移一个节点，重新开始</span></span><br><span class="line">            b = n;</span><br><span class="line">            n = f;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>get方法还是比较简单的，<code>findPrecessor</code>方法找到的就是小于key但是最接近key的节点，所以key如果存在，必然是<code>findPrecessor</code>找到的节点的下一个节点，而代码中为了考虑并发带来的修改，还要做很多其他的判断。</p>
+<h3 id="remove"><a href="#remove" class="headerlink" title="remove()"></a>remove()</h3><p>接下来看下删除的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">remove</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> doRemove(key, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">doRemove</span><span class="params">(Object key, Object value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    Comparator&lt;? <span class="keyword">super</span> K&gt; cmp = comparator;</span><br><span class="line">    outer: <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">    <span class="comment">// findPrecessor找到比key小但是最近的node</span></span><br><span class="line">    <span class="comment">//不考虑并发的话，如果存在key那就是n=b.next</span></span><br><span class="line">        <span class="keyword">for</span> (Node&lt;K,V&gt; b = findPredecessor(key, cmp), n = b.next;;) &#123;</span><br><span class="line">            Object v; <span class="keyword">int</span> c;</span><br><span class="line">            <span class="keyword">if</span> (n == <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">break</span> outer;</span><br><span class="line">            Node&lt;K,V&gt; f = n.next;</span><br><span class="line">            <span class="comment">//考虑一些并发修改的问题</span></span><br><span class="line">            <span class="keyword">if</span> (n != b.next)                    <span class="comment">// inconsistent read</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">if</span> ((v = n.value) == <span class="keyword">null</span>) &#123;        <span class="comment">// n is deleted</span></span><br><span class="line">                n.helpDelete(b, f);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (b.value == <span class="keyword">null</span> || v == n)      <span class="comment">// b is deleted</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="comment">// 如果key&lt;n，说明key不存在，退出最外层循环</span></span><br><span class="line">            <span class="keyword">if</span> ((c = cpr(cmp, key, n.key)) &lt; <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">break</span> outer;</span><br><span class="line">            <span class="comment">//c&gt;0说明findPre方法找到的节点过期了，重新找</span></span><br><span class="line">            <span class="keyword">if</span> (c &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                b = n;</span><br><span class="line">                n = f;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// c==0</span></span><br><span class="line">            <span class="keyword">if</span> (value != <span class="keyword">null</span> &amp;&amp; !value.equals(v))</span><br><span class="line">                <span class="keyword">break</span> outer;</span><br><span class="line">            <span class="comment">//通过cas将节点n的value设为null，就是key对应的节点</span></span><br><span class="line">            <span class="comment">//findPrecessor方法会在读到value为null的值时进行删除</span></span><br><span class="line">            <span class="keyword">if</span> (!n.casValue(v, <span class="keyword">null</span>))</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="comment">//n添加删除标志并且更新b.next指针</span></span><br><span class="line">            <span class="comment">//appendMarker创建一个key为null,value为自己的节点</span></span><br><span class="line">            <span class="keyword">if</span> (!n.appendMarker(f) || !b.casNext(n, f))</span><br><span class="line">                findNode(key);                  <span class="comment">// retry via findNode</span></span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//删除成功并且更新b.next后进入该分支</span></span><br><span class="line">            <span class="comment">//findPredecessor会在value==null时，更新next指针，实现删除</span></span><br><span class="line">                findPredecessor(key, cmp);      <span class="comment">// clean index</span></span><br><span class="line">                <span class="keyword">if</span> (head.right == <span class="keyword">null</span>)</span><br><span class="line">                    tryReduceLevel();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>) V vv = (V)v;</span><br><span class="line">            <span class="keyword">return</span> vv;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="findPredecessor"><a href="#findPredecessor" class="headerlink" title="findPredecessor()"></a>findPredecessor()</h3><p>到这里插入、读取和删除都介绍完了，这三个方法都调用了<code>findPredecessor</code>，可以说这个方法是跳表的核心了。所以这里拿出来再看一下该方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Node&lt;K,V&gt; <span class="title">findPredecessor</span><span class="params">(Object key, Comparator&lt;? <span class="keyword">super</span> K&gt; cmp)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(); </span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="comment">//q为第一层的head节点</span></span><br><span class="line">        <span class="comment">//r=q.right说明先向右遍历</span></span><br><span class="line">        <span class="keyword">for</span> (Index&lt;K,V&gt; q = head, r = q.right, d;;) &#123;</span><br><span class="line">            <span class="comment">//向右遍历的时候，右边的节点不为空</span></span><br><span class="line">            <span class="keyword">if</span> (r != <span class="keyword">null</span>) &#123;</span><br><span class="line">                Node&lt;K,V&gt; n = r.node;</span><br><span class="line">                K k = n.key;</span><br><span class="line">                <span class="comment">//在remove方法中，n.casValue(v, null)将节点的值置空</span></span><br><span class="line">                <span class="comment">//置空后，在这里进行索引节点的删除</span></span><br><span class="line">                <span class="keyword">if</span> (n.value == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//unlink操作为将原本的q-&gt;r-&gt;r.next</span></span><br><span class="line">            <span class="comment">//转换为q-&gt;r.next</span></span><br><span class="line">                    <span class="keyword">if</span> (!q.unlink(r))</span><br><span class="line">                        <span class="keyword">break</span>;           <span class="comment">// restart</span></span><br><span class="line">                    r = q.right;         <span class="comment">// reread r</span></span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//如果r的节点没被删除，就执行到这里</span></span><br><span class="line">                <span class="comment">//如果key大于当前的k，则向后移一个节点</span></span><br><span class="line">                <span class="comment">//head索引节点也向后移一个节点</span></span><br><span class="line">                <span class="keyword">if</span> (cpr(cmp, key, k) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    q = r;</span><br><span class="line">                    r = r.right;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//如果索引节点的右边没有节点了，则向下移动</span></span><br><span class="line">            <span class="comment">//向下移动后如果还是索引层，则继续向后</span></span><br><span class="line">            <span class="comment">//如果是节点，直接返回了</span></span><br><span class="line">            <span class="keyword">if</span> ((d = q.down) == <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">return</span> q.node;</span><br><span class="line">            q = d;</span><br><span class="line">            r = d.right;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本文介绍了跳表的特点和使用场景，并对<code>ConcurrentSkipListMap</code>的源码进行了简略的分析，但由于并发的存在，使得在理解跳表上增加了一些不必要的难度，同时其生成索引层的代码也比较晦涩难懂，可以通过维基百科等更简单的途径来了解其原理和源码。</p>
+
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>thanks<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/zhifubao.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -212,16 +278,79 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/08/跳表-ConcurrentSkipListMap走马观花/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/09/08/跳表-ConcurrentSkipListMap走马观花/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Java阻塞队列源码(2)-LinkedBlockingQueue
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -236,760 +365,32 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java阻塞队列源码-2-LinkedBlockingQueue" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/">Java阻塞队列源码(2)-LinkedBlockingQueue</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/" class="archive-article-date">
-  	<time datetime="2019-07-03T09:11:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在系列的第一篇中介绍了<code>ArrayBlockingQueue</code>的源码实现，用数组实现了阻塞队列，作为系列的第二篇，将分析<code>LinkedBlockingQueue</code>的源码。基于链表的队列与基于数组的队列相比，基于链表的数据结构将提供更大的容量，但是随机读写的性能会低于按下标访问的速度，这些由于底层存储元素的数据结构不同导致的性能差异在两种<code>List</code>的实现中也体现了出来。</p>
-<h3 id="构造函数与成员变量"><a href="#构造函数与成员变量" class="headerlink" title="构造函数与成员变量"></a>构造函数与成员变量</h3><p>首先看下<code>LinkedBlockingQueue</code>类的继承关系,与<code>ArrayBlockingQueue</code>的继承关系一致,<code>AbstractQueue</code>是一个抽象类，用模板方法设计模式封装了几个简单的方法，具体的方法实现在实现类中。<code>BlockingQueue</code>接口则定义了阻塞队列的通用方法，在系列第一篇文章中介绍过，不再分析。</p>
-        
-          <a class="article-more-a" href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#跳跃表"><span class="toc-number">1.</span> <span class="toc-text">跳跃表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点"><span class="toc-number">2.</span> <span class="toc-text">节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#源码阅读小技巧"><span class="toc-number">3.</span> <span class="toc-text">源码阅读小技巧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构造函数"><span class="toc-number">4.</span> <span class="toc-text">构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#put"><span class="toc-number">5.</span> <span class="toc-text">put()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get"><span class="toc-number">6.</span> <span class="toc-text">get()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#remove"><span class="toc-number">7.</span> <span class="toc-text">remove()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#findPredecessor"><span class="toc-number">8.</span> <span class="toc-text">findPredecessor()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">9.</span> <span class="toc-text">总结</span></a></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
-
-  
-    <article id="post-Java阻塞队列源码(1)-ArrayBlockingQueue" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/01/Java阻塞队列源码(1)-ArrayBlockingQueue/">Java阻塞队列源码(1)-ArrayBlockingQueue</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/01/Java阻塞队列源码(1)-ArrayBlockingQueue/" class="archive-article-date">
-  	<time datetime="2019-07-01T09:41:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Java并发包下有个<code>BlockingQueue</code>接口，并提供了多种阻塞队列的实现方式。阻塞队列通常被用于生产者消费者模型、消息队列、并行任务等并发场景，并通过内部的锁和并发控制实现线程安全。这个系列将分析其中多种实现的源码，了解阻塞队列的实现细节，从而能够根据使用场景的不同选择最适合的阻塞队列实现类。</p>
-<p>并发包下关于阻塞队列的接口和实现如下所示：</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/BlockingQueue.PNG" alt="接口与实现类"></p>
-        
-          <a class="article-more-a" href="/2019/07/01/Java阻塞队列源码(1)-ArrayBlockingQueue/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/01/Java阻塞队列源码(1)-ArrayBlockingQueue/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java线程池源码分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/02/Java线程池源码分析/">Java线程池源码分析</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/02/Java线程池源码分析/" class="archive-article-date">
-  	<time datetime="2019-05-02T08:49:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>多线程是进行并发编程时运用到的最主要的技术，由于频繁的创建销毁线程会带来较大的开销，因此又引申出线程池的概念。在需要一个新的线程来执行任务时，从池子中找出一个空闲的线程来执行任务，减少了线程重复创建的次数，减少CPU等资源的消耗。</p>
-<p>经过JDK很好的封装，线程池使用起来非常的简单，只需要简单的参照一个示例代码，就能够使用上线程池，那么对于这种并发中最重要的技能，仅仅会用是不够的，必须深入理解其实现原理，那么一起从源码中一探究竟吧。</p>
-        
-          <a class="article-more-a" href="/2019/05/02/Java线程池源码分析/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/02/Java线程池源码分析/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ConcurrentHashMap源码全解析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/11/ConcurrentHashMap源码全解析/">ConcurrentHashMap源码全解析</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/11/ConcurrentHashMap源码全解析/" class="archive-article-date">
-  	<time datetime="2019-04-11T08:43:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这篇文章将解析<code>ConcurrentHashMap</code>的源码，<code>ConcurrentHashMap</code>是一个支持并发检索及高并发性的哈希表实现。包含了与<code>HashTable</code>方法相对应的所有实现，但是又比<code>HashTable</code>高效。</p>
-<p>一般来说同步操作是通过锁来保证线程安全，那么提高并发性有三种优化方式，第一种是对不需要同步的方法不加锁;第二种是缩小加锁的粒度;第三种是通过CAS,即尝试通过不加锁实现同步。对于CAS不理解的，可以查阅相关资料了解下，对阅读本文和<code>ConcurrentHashMap</code>有帮助.</p>
-        
-          <a class="article-more-a" href="/2019/04/11/ConcurrentHashMap源码全解析/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/11/ConcurrentHashMap源码全解析/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java动态代理原理剖析-二-cglib" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/04/Java动态代理原理剖析-二-cglib/">Java动态代理原理剖析(二)-cglib</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/04/Java动态代理原理剖析-二-cglib/" class="archive-article-date">
-  	<time datetime="2019-03-04T06:08:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>前面一篇文章<a href="https://cfk1996.github.io/2019/02/28/Java%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90/">Java动态代理原理剖析(一)</a>分析了JDK版本的动态代理实现，但是它有一个缺陷，生成的代理类会继承Proxy类，而Java是单继承，所以无法对一个没有实现接口的类做代理。</p>
-<p>而这篇文章将要介绍的<a href="https://github.com/cglib/cglib">cglib</a>将会解决这个问题。<code>cglib</code>是一个第三方依赖，根据<code>cglib</code>的wiki描述，它是一个有力的、高性能的、高质量的代码生成库，被用来在运行时继承JAVA类或实现接口。</p>
-<h3 id="如何使用cglib"><a href="#如何使用cglib" class="headerlink" title="如何使用cglib"></a>如何使用cglib</h3><p>前一篇文章已经介绍了动态代理的相关知识，那么现在就直接看下cglib是如何使用的.</p>
-        
-          <a class="article-more-a" href="/2019/03/04/Java动态代理原理剖析-二-cglib/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/04/Java动态代理原理剖析-二-cglib/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java动态代理原理剖析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/28/Java动态代理原理剖析/">Java动态代理原理剖析(一)</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/28/Java动态代理原理剖析/" class="archive-article-date">
-  	<time datetime="2019-02-28T09:24:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这篇文章将深入的分析Java的动态代理实现原理，首先将自己实现一个动态代理，然后顺势分析JDK中的动态代理实现并与自己实现的版本作对比，第二篇文章再分析cglib版本的动态代理实现原理，用两篇文章让你彻底搞懂动态代理。</p>
-<h3 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h3><p>在了解动态代理之前，先介绍一下静态代理。代理模式就是实现一个代理来控制被代理对象的一些行为，一些常见的作用包括记录被代理对象的执行时间或者添加访问权限，屏蔽不必要的请求等，不理解代理模式的可以先去查找资料简单了解，不过多介绍。</p>
-<p>首先给出个在执行方法前后输出提示信息的静态代理的例子，非常的简单。</p>
-        
-          <a class="article-more-a" href="/2019/02/28/Java动态代理原理剖析/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/28/Java动态代理原理剖析/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-高性能mysql" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/23/高性能mysql/">高性能mysql</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/23/高性能mysql/" class="archive-article-date">
-  	<time datetime="2019-02-23T13:40:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在看《高性能Mysql》,深入的学习一下mysql的相关知识及原理，并记录下相关知识点。记录的内容可能跳跃性较大，基于我自己主观意愿，需要一定的mysql基础。</p>
-<h3 id="1-mysql服务器逻辑架构"><a href="#1-mysql服务器逻辑架构" class="headerlink" title="1 mysql服务器逻辑架构"></a>1 mysql服务器逻辑架构</h3><p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/mysql.png" alt="mysql架构图"></p>
-<p>最上层的服务并不是mysql独有的，大多数基于网络的BS服务都有类似的架构。</p>
-<p>第二层架构是Mysql中比较有意思的部分，大多数mysql的核心服务功能都在这一层，包括查询解析、分析、优化、缓存等。</p>
-<p>第三层包含了存储引擎，存储引擎负责mysql中数据的存储和提取，不同的存储引擎有各自的优点和缺点，服务器通过API与存储引擎通信，这些接口屏蔽了不同存储引擎的差异，使得这些差异对上层的查询过程透明。</p>
-        
-          <a class="article-more-a" href="/2019/02/23/高性能mysql/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/23/高性能mysql/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java集合源码系列-LinkedList" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/03/Java集合源码系列-LinkedList/">Java集合源码系列-LinkedList</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/03/Java集合源码系列-LinkedList/" class="archive-article-date">
-  	<time datetime="2019-02-03T07:22:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这是Java集合源码系列的第三篇了，准备来介绍一下<code>LinkedList</code>这个类,<code>LinkedList</code>常与<code>ArrayList</code>放在一起比较，都是<code>List</code>接口的实现类，但是底层的数据结构不同，导致它们在一些操作上各有优缺点，需要根据应用场景灵活选用<code>List</code>。<code>ArrayList</code>的细节上篇文章已经介绍过了，不了解的可以回过去看一下。<code>LinkedList</code>的底层实现是一个双向链表，同时也实现了<code>Deque</code>接口，因此也可以作为双向队列的一个实现，这是<code>LinkedList</code>相比<code>ArrayList</code>的另外一个重大特性。话不多说，直接进入源码分析阶段吧,按照惯例，依然是从使用集合的整个生命周期来作为行文路线，即创建–&gt;插入–&gt;获取–&gt;删除。</p>
-        
-          <a class="article-more-a" href="/2019/02/03/Java集合源码系列-LinkedList/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/03/Java集合源码系列-LinkedList/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java集合源码系列-ArrayList" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/22/Java集合源码系列-ArrayList/">Java集合源码系列-ArrayList</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/22/Java集合源码系列-ArrayList/" class="archive-article-date">
-  	<time datetime="2019-01-22T15:02:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这是Java集合源码系列的第二篇，第一篇分析了HashMap，本来想把TreeMap和HashMap这几个Map实现分析一下，但是一个是红黑树的一个是不常用的类，想想就不浪费这个时间了。后面有时间有能力可以尝试分析下更有意义的<code>ConcurrentHashMap</code>。不过这篇文章将要分析的是经常用到的<code>ArrayList</code>。</p>
-<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p><code>ArrayList</code>是一个列表，底层是一个大小可以改变的数组类型。而数组类型在内存中的地址是连续的，可以通过数组下标直接计算出地址，所以可以以O(1)的时间复杂度进行<strong>get</strong>操作，但是<strong>add</strong>操作，需要对插入下标之后的数据进行向后移动，所以平均时间复杂度将会是O(n)。而列表的另外一种实现<code>LinkedList</code>则是采用双向链表，靠指针将前后数据连接起来，但数据在内存中并不是连续存放的，这种方式对插入和删除的操作友好，但是<strong>get</strong>的性能稍差。</p>
-<p>下面还是按照之前的思路，从使用<code>ArrayList</code>的整个生命周期来作为行文路线，即创建–&gt;添加–&gt;获取–&gt;删除。</p>
-        
-          <a class="article-more-a" href="/2019/01/22/Java集合源码系列-ArrayList/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/22/Java集合源码系列-ArrayList/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -1012,8 +413,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
