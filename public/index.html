@@ -161,6 +161,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-介绍几种路由算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/26/介绍几种路由算法/">介绍几种负载均衡算法</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/26/介绍几种路由算法/" class="archive-article-date">
+  	<time datetime="2019-10-26T08:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在看sofa-rpc的源码，今天把里面涉及到的路由模块中几个算法记录一下。</p>
+<p>现在的很多服务都是由集群组成的，集群前会有一个负载均衡服务器来负责选择一个合适的服务器提供服务，让不同的服务器尽可能均衡的处理请求，这里面就涉及到如何作出选择，就产生了很多种负载均衡算法，需要根据项目场景选择一个适合的。</p>
+        
+          <a class="article-more-a" href="/2019/10/26/介绍几种路由算法/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">分布式</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/26/介绍几种路由算法/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-跳表-ConcurrentSkipListMap走马观花" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -904,88 +985,6 @@
 
 
   
-    <article id="post-Java集合源码系列-ArrayList" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/22/Java集合源码系列-ArrayList/">Java集合源码系列-ArrayList</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/22/Java集合源码系列-ArrayList/" class="archive-article-date">
-  	<time datetime="2019-01-22T15:02:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这是Java集合源码系列的第二篇，第一篇分析了HashMap，本来想把TreeMap和HashMap这几个Map实现分析一下，但是一个是红黑树的一个是不常用的类，想想就不浪费这个时间了。后面有时间有能力可以尝试分析下更有意义的<code>ConcurrentHashMap</code>。不过这篇文章将要分析的是经常用到的<code>ArrayList</code>。</p>
-<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p><code>ArrayList</code>是一个列表，底层是一个大小可以改变的数组类型。而数组类型在内存中的地址是连续的，可以通过数组下标直接计算出地址，所以可以以O(1)的时间复杂度进行<strong>get</strong>操作，但是<strong>add</strong>操作，需要对插入下标之后的数据进行向后移动，所以平均时间复杂度将会是O(n)。而列表的另外一种实现<code>LinkedList</code>则是采用双向链表，靠指针将前后数据连接起来，但数据在内存中并不是连续存放的，这种方式对插入和删除的操作友好，但是<strong>get</strong>的性能稍差。</p>
-<p>下面还是按照之前的思路，从使用<code>ArrayList</code>的整个生命周期来作为行文路线，即创建–&gt;添加–&gt;获取–&gt;删除。</p>
-        
-          <a class="article-more-a" href="/2019/01/22/Java集合源码系列-ArrayList/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/22/Java集合源码系列-ArrayList/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1103,15 +1102,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">分布式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
