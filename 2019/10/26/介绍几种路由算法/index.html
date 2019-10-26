@@ -6,14 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019 | kunkun</title>
+  <title>介绍几种负载均衡算法 | kunkun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="kunkun">
-<meta property="og:url" content="http://yoursite.com/archives/2019/page/2/index.html">
+  <meta name="description" content="最近在看sofa-rpc的源码，今天把里面涉及到的路由模块中几个算法记录一下。 现在的很多服务都是由集群组成的，集群前会有一个负载均衡服务器来负责选择一个合适的服务器提供服务，让不同的服务器尽可能均衡的处理请求，这里面就涉及到如何作出选择，就产生了很多种负载均衡算法，需要根据项目场景选择一个适合的。">
+<meta name="keywords" content="Java,分布式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="介绍几种负载均衡算法">
+<meta property="og:url" content="http://yoursite.com/2019/10/26/介绍几种路由算法/index.html">
 <meta property="og:site_name" content="kunkun">
+<meta property="og:description" content="最近在看sofa-rpc的源码，今天把里面涉及到的路由模块中几个算法记录一下。 现在的很多服务都是由集群组成的，集群前会有一个负载均衡服务器来负责选择一个合适的服务器提供服务，让不同的服务器尽可能均衡的处理请求，这里面就涉及到如何作出选择，就产生了很多种负载均衡算法，需要根据项目场景选择一个适合的。">
+<meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/wechat.jpg">
+<meta property="og:updated_time" content="2019-10-26T11:44:44.291Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kunkun">
+<meta name="twitter:title" content="介绍几种负载均衡算法">
+<meta name="twitter:description" content="最近在看sofa-rpc的源码，今天把里面涉及到的路由模块中几个算法记录一下。 现在的很多服务都是由集群组成的，集群前会有一个负载均衡服务器来负责选择一个合适的服务器提供服务，让不同的服务器尽可能均衡的处理请求，这里面就涉及到如何作出选择，就产生了很多种负载均衡算法，需要根据项目场景选择一个适合的。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/wechat.jpg">
   
     <link rel="alternative" href="/atom.xml" title="kunkun" type="application/atom+xml">
   
@@ -159,36 +166,95 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-介绍几种路由算法" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/01/22/Java集合源码系列-ArrayList/" class="archive-article-date">
-  	<time datetime="2019-01-22T15:02:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-22</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/01/22/Java集合源码系列-ArrayList/">Java集合源码系列-ArrayList</a>
+    <h1 class="article-title" itemprop="name">
+      介绍几种负载均衡算法
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/10/26/介绍几种路由算法/" class="archive-article-date">
+  	<time datetime="2019-10-26T08:00:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在看sofa-rpc的源码，今天把里面涉及到的路由模块中几个算法记录一下。</p>
+<p>现在的很多服务都是由集群组成的，集群前会有一个负载均衡服务器来负责选择一个合适的服务器提供服务，让不同的服务器尽可能均衡的处理请求，这里面就涉及到如何作出选择，就产生了很多种负载均衡算法，需要根据项目场景选择一个适合的。</p>
+<a id="more"></a>
+<h3 id="算法接口"><a href="#算法接口" class="headerlink" title="算法接口"></a>算法接口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ProviderInfo封装了服务器信息，如服务器url，权重等</span></span><br><span class="line"><span class="function">ProviderInfo <span class="title">select</span><span class="params">(List&lt;ProviderInfo&gt; providers)</span></span></span><br></pre></td></tr></table></figure>
+<p>负载均衡算法就是从一个列表（包含了集群所有服务器）中选择出一个合适的服务器</p>
+<h3 id="轮询算法-Round-Robin"><a href="#轮询算法-Round-Robin" class="headerlink" title="轮询算法(Round Robin)"></a>轮询算法(Round Robin)</h3><p>轮询算法是最容易想到的一个算法，当有请求来时，依次发给每个服务器，如果每个服务器的处理能力一样，每个请求花费的时间也差不多，那么这种算法也能够很好的进行负载均衡。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AtomicLong count = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line"><span class="function"><span class="keyword">public</span> ProviderInfo <span class="title">doSelect</span><span class="params">(List&lt;ProviderInfo&gt; providerInfos)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> length = providerInfos.size(); <span class="comment">// 服务器总个数</span></span><br><span class="line">    <span class="keyword">return</span> providerInfos.get(count.getAndIncrement() % length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>非常的简单，用一个变量维护请求的总次数，同时利用Atomic类型来支持并发路由。</p>
+<h3 id="轮询带权重"><a href="#轮询带权重" class="headerlink" title="轮询带权重"></a>轮询带权重</h3><p>如果服务器处理能力相同，那么我们用上面轮询就可以很好的解决负载均衡的问题。但是考虑到不同的服务器的处理能力是不一样的，比如有的服务器16g内存，有的服务器32G内存；有的服务器只部署了一个服务，有的服务器与其他服务一起部署等。所以服务器信息里有带上权重信息，负载均衡时需要考虑到服务器的权重。</p>
+<p>该算法在sofa-rpc中是不推荐使用的，效率差</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">AtomicLong sequence = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line"><span class="function"><span class="keyword">public</span> ProviderInfo <span class="title">doSelect</span><span class="params">(List&lt;ProviderInfo&gt; providerInfos)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> length = providerInfos.size(); <span class="comment">// 总个数</span></span><br><span class="line">    <span class="keyword">int</span> maxWeight = <span class="number">0</span>; <span class="comment">// 最大权重</span></span><br><span class="line">    <span class="keyword">int</span> minWeight = Integer.MAX_VALUE; <span class="comment">// 最小权重</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> LinkedHashMap&lt;ProviderInfo, IntegerWrapper&gt; invokerToWeightMap = <span class="keyword">new</span> LinkedHashMap&lt;ProviderInfo, IntegerWrapper&gt;();</span><br><span class="line">    <span class="keyword">int</span> weightSum = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 计算累计权重，最大权重，最小权重</span></span><br><span class="line">    <span class="keyword">for</span> (ProviderInfo providerInfo : providerInfos) &#123;</span><br><span class="line">        <span class="keyword">int</span> weight = getWeight(providerInfo);</span><br><span class="line">        maxWeight = Math.max(maxWeight, weight); <span class="comment">// 累计最大权重</span></span><br><span class="line">        minWeight = Math.min(minWeight, weight); <span class="comment">// 累计最小权重</span></span><br><span class="line">        <span class="keyword">if</span> (weight &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            invokerToWeightMap.put(providerInfo, <span class="keyword">new</span> IntegerWrapper(weight));</span><br><span class="line">            weightSum += weight;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> currentSequence = sequence.getAndIncrement();</span><br><span class="line">    <span class="keyword">if</span> (maxWeight &gt; <span class="number">0</span> &amp;&amp; minWeight &lt; maxWeight) &#123; <span class="comment">// 权重不一样</span></span><br><span class="line">    <span class="comment">// 在无权重中，轮询的顺序为123412341234...</span></span><br><span class="line">    <span class="comment">// 但是加入权重后，一轮的个数为总权重</span></span><br><span class="line">    <span class="comment">// 权重高的需要在一轮中多被选择几次</span></span><br><span class="line">        <span class="keyword">int</span> mod = currentSequence % weightSum;</span><br><span class="line"></span><br><span class="line"><span class="comment">// for循环的结果举例：</span></span><br><span class="line"><span class="comment">// 权重为1、2、3、4三个节点，顺序为 1234234344</span></span><br><span class="line"><span class="comment">// 但是可以看出时间复杂度很高，需要遍历maxWeight*服务器数量</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; maxWeight; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (Map.Entry&lt;ProviderInfo, IntegerWrapper&gt; each : invokerToWeightMap.entrySet()) &#123;</span><br><span class="line">                <span class="keyword">final</span> ProviderInfo k = each.getKey();</span><br><span class="line">                <span class="keyword">final</span> IntegerWrapper v = each.getValue();</span><br><span class="line">            <span class="comment">// 只有当权重值大于0时才会被选中</span></span><br><span class="line">            <span class="comment">// 权重为1、2、3、4三个节点</span></span><br><span class="line">            <span class="comment">// 1234（1）234</span></span><br><span class="line">            <span class="comment">// 第五次的时候，因为（1）的权重不够</span></span><br><span class="line">            <span class="comment">// 所以跳过，从2开始</span></span><br><span class="line">                <span class="keyword">if</span> (mod == <span class="number">0</span> &amp;&amp; v.getValue() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> k;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (v.getValue() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    v.decrement();</span><br><span class="line">                    mod--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 等权重，相当于上一个</span></span><br><span class="line">    <span class="keyword">return</span> providerInfos.get(currentSequence % length);</span><br></pre></td></tr></table></figure>
+<h3 id="随机算法"><a href="#随机算法" class="headerlink" title="随机算法"></a>随机算法</h3><p>随机算法也可以考虑服务器的权重来进行负载均衡，让权重高的服务器处理更多的请求。但是需要保障随机数产生是合理的（简单的就是Random类）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ProviderInfo <span class="title">doSelect</span><span class="params">(List&lt;ProviderInfo&gt; providerInfos)</span> </span>&#123;</span><br><span class="line">    ProviderInfo providerInfo = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">int</span> size = providerInfos.size();</span><br><span class="line">    <span class="keyword">int</span> totalWeight = <span class="number">0</span>; <span class="comment">// 总权重</span></span><br><span class="line">    <span class="keyword">boolean</span> isWeightSame = <span class="keyword">true</span>; <span class="comment">// 判断权重是否都一样</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> weight = getWeight(providerInfos.get(i));<span class="comment">//获取服务器的权重</span></span><br><span class="line">        totalWeight += weight; <span class="comment">// 累计总权重</span></span><br><span class="line">        <span class="keyword">if</span> (isWeightSame &amp;&amp; i &gt; <span class="number">0</span> &amp;&amp; weight != getWeight(providerInfos.ge(i - <span class="number">1</span>))) &#123;</span><br><span class="line">            isWeightSame = <span class="keyword">false</span>; <span class="comment">// 计算所有权重是否一样</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (totalWeight &gt; <span class="number">0</span> &amp;&amp; !isWeightSame) &#123;</span><br><span class="line">        <span class="comment">// 如果权重不相同且权重大于0则按总权重数随机</span></span><br><span class="line">        <span class="keyword">int</span> offset = random.nextInt(totalWeight);</span><br><span class="line">        <span class="comment">// 并确定随机值落在哪个片断上</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            offset -= getWeight(providerInfos.get(i));</span><br><span class="line">            <span class="keyword">if</span> (offset &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                providerInfo = providerInfos.get(i);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">// 举个例子方便理解，假设就两个服务器，第一个权重1，第二个权重2</span></span><br><span class="line"><span class="comment">// 则totalWeigh=1+2=3</span></span><br><span class="line"><span class="comment">// random.nextInt(totalWeight)会均衡的产生0,1,2三个数字</span></span><br><span class="line"><span class="comment">// 如果产生0则第一次循环时offset = 0-1 = -1 &lt; 0</span></span><br><span class="line"><span class="comment">// 所以选择第一个服务器</span></span><br><span class="line"><span class="comment">// 如果产生1则第一次循环时offset = 1-1 = 0;</span></span><br><span class="line"><span class="comment">// 因为不小于0,进入第二次循环，选择第二个机器</span></span><br><span class="line"><span class="comment">// 如果产生2则也是同样的选择第二个机器</span></span><br><span class="line"><span class="comment">// 因为0,1,2产生的概率相等，但是出现1和2时都是第二台服务器</span></span><br><span class="line"><span class="comment">// 所以第二台服务器处理的请求大概是第一台的两倍</span></span><br><span class="line"><span class="comment">// 与它们的权重是1和2一致</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果权重相同或权重为0则均等随机</span></span><br><span class="line">        providerInfo = providerInfos.get(random.nextInt(size));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> providerInfo;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="一致性哈希算法"><a href="#一致性哈希算法" class="headerlink" title="一致性哈希算法"></a>一致性哈希算法</h3><p>上面的两种负载均衡算法，在无状态的集群中可以表现的不错，但很多服务是有状态的，比如同一个用户的多个请求，希望始终发到同一个机器来处理，所以又产生了一致性哈希负载均衡算法。</p>
+<p>假设有3台服务器，计算出的hash值为100，500， 10000.另外假设计算出来的hash上限为15000.那么就可以想象出一个环，起点为0，终点为15000，顺时针慢慢变大。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0 --&gt;100-----&gt;200</span><br><span class="line">|               |</span><br><span class="line">|               |</span><br><span class="line">10000&lt;-----------</span><br></pre></td></tr></table></figure></p>
+<p>当请求来时，会根据请求的参数也计算出一个hash值，如果落在0～100，则让第一台服务器处理，落在100～200让第二台服务器处理依次类推。但是可以从图里看出个缺陷，就是hash值是我们无法控制的，会导致不同服务器之间的<code>hash间距</code>差异很大，导致不均衡，下面看下<code>sofa-rpc</code>如何解决这个问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 同一个方法名字的会发送到同一个服务器</span></span><br><span class="line"><span class="comment">// SofaRequest封装了请求相关信息 </span></span><br><span class="line">Selector selector = <span class="keyword">null</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> ProviderInfo <span class="title">doSelect</span><span class="params">(SofaRequest request, List&lt;ProviderInfo&gt; providerInfos)</span> </span>&#123;</span><br><span class="line">    String interfaceId = request.getInterfaceName();</span><br><span class="line">    String method = request.getMethodName();</span><br><span class="line">    <span class="keyword">int</span> hashcode = providerInfos.hashCode(); <span class="comment">// 判断是否同样的服务列表</span></span><br><span class="line">    <span class="keyword">if</span> (selector == <span class="keyword">null</span> <span class="comment">// 原来没有</span></span><br><span class="line">        ||</span><br><span class="line">        selector.getHashCode() != hashcode) &#123; <span class="comment">// 或者服务列表已经变化</span></span><br><span class="line">        selector = <span class="keyword">new</span> Selector(interfaceId, method, providerInfos, hashcode);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> selector.select(request);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为要计算服务器的hash值,添加一个新的Selector变量,避免hash值重复计算<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Selector</span><span class="params">(String interfaceId, String method, List&lt;ProviderInfo&gt; actualNodes, <span class="keyword">int</span> hashcode)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.interfaceId = interfaceId;</span><br><span class="line">    <span class="keyword">this</span>.method = method;</span><br><span class="line">    <span class="keyword">this</span>.hashcode = hashcode;</span><br><span class="line"><span class="comment">// 常规一致性hash算法一个服务器只有一个节点</span></span><br><span class="line"><span class="comment">// 但是由于hash值无法控制，会导致不同服务器间hash值距离差距过大</span></span><br><span class="line"><span class="comment">// 导致不均衡</span></span><br><span class="line"><span class="comment">// sofa-rpc中进行了优化</span></span><br><span class="line"><span class="comment">// 创建虚拟节点环 （默认一个provider共创建128个虚拟节点，较多比较均匀）</span></span><br><span class="line"><span class="comment">// 所有虚拟节点用TreeMap保存，TreeMap按hash值有序</span></span><br><span class="line">    <span class="keyword">this</span>.virtualNodes = <span class="keyword">new</span> TreeMap&lt;Long, ProviderInfo&gt;();</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">128</span>;</span><br><span class="line">    <span class="keyword">for</span> (ProviderInfo providerInfo : actualNodes) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num / <span class="number">4</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] digest = HashUtils.messageDigest(providerInfo.getHost() + providerInfo.getPort() + i);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> h = <span class="number">0</span>; h &lt; <span class="number">4</span>; h++) &#123;</span><br><span class="line">                <span class="keyword">long</span> m = HashUtils.hash(digest, h);</span><br><span class="line">                virtualNodes.put(m, providerInfo);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// selector.select()</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ProviderInfo <span class="title">select</span><span class="params">(SofaRequest request)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 获取方法名字符串</span></span><br><span class="line">    String key = buildKeyOfHash(request.getMethodArgs());</span><br><span class="line">    <span class="comment">// 计算该方法的hash值，相同的方法hash一样</span></span><br><span class="line">    <span class="keyword">byte</span>[] digest = HashUtils.messageDigest(key);</span><br><span class="line">    <span class="keyword">return</span> selectForKey(HashUtils.hash(digest, <span class="number">0</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> ProviderInfo <span class="title">selectForKey</span><span class="params">(<span class="keyword">long</span> hash)</span> </span>&#123;</span><br><span class="line"><span class="comment">// TreeMap.ceilingEntry获取大于hash的第一个元素</span></span><br><span class="line">    Map.Entry&lt;Long, ProviderInfo&gt; entry = virtualNodes.ceilingEntry(hash);</span><br><span class="line">    <span class="keyword">if</span> (entry == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果没有，则是从头开始的第一个元素，所以像个环</span></span><br><span class="line">        entry = virtualNodes.firstEntry();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> entry.getValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="一致性哈希带权重"><a href="#一致性哈希带权重" class="headerlink" title="一致性哈希带权重"></a>一致性哈希带权重</h3><p>上面那个算法没有考虑权重的因素，考虑权重也很简单。在<code>Seletor</code>的构造函数中，我们固定为每个服务器创建128个节点，如果考虑权重，只需要在创建虚拟节点时，将创建的个数乘以权重系数，这样不同权重的服务器产生的虚拟节点个数与权重成正比。其他代码不需改动。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Selector</span><span class="params">(String interfaceId, String method, List&lt;ProviderInfo&gt; actualNodes, <span class="keyword">int</span> hashcode)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 创建虚拟节点环 （provider创建虚拟节点数 =  真实节点权重 * 32）</span></span><br><span class="line">    <span class="keyword">this</span>.virtualNodes = <span class="keyword">new</span> TreeMap&lt;Long, ProviderInfo&gt;();</span><br><span class="line">    <span class="comment">// 设置越大越慢，精度越高</span></span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">32</span>;</span><br><span class="line">    <span class="keyword">for</span> (ProviderInfo providerInfo : actualNodes) &#123;</span><br><span class="line">        <span class="comment">// 只需要修改一行代码，i &lt; num * providerInfo.getWeight()</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num * providerInfo.getWeight() / <span class="number">4</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] digest = HashUtils.messageDigest(providerInfo.getHost() + providerInfo.getPort() + i);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> h = <span class="number">0</span>; h &lt; <span class="number">4</span>; h++) &#123;</span><br><span class="line">                <span class="keyword">long</span> m = HashUtils.hash(digest, h);</span><br><span class="line">                virtualNodes.put(m, providerInfo);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="其他废话"><a href="#其他废话" class="headerlink" title="其他废话"></a>其他废话</h3><p>有段时间没写博客了，几个礼拜前想写<code>阻塞队列SynchronizedQueue源码分析</code>，我一直是边看边写的，写了一大半，有些关键的代码看不懂了，所以停止了那篇文章。同步、并发相关的代码理解难度比较大，我现在水平还不够，不能很好的理解，就不写出来误导大家，继续修炼～</p>
+<p>以后可能会更关注高层次一些的东西，比如框架源码，一些算法思想什么的，类似并发底层的文章，需要再积累一段时间。</p>
+<h3 id="往期回顾"><a href="#往期回顾" class="headerlink" title="往期回顾"></a>往期回顾</h3><ul>
+<li><p><a href="https://cfk1996.github.io/2019/02/28/Java%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90/" target="_blank" rel="external">Java动态代理原理剖析(一)</a></p>
+</li>
+<li><p><a href="https://cfk1996.github.io/2019/05/02/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" target="_blank" rel="external">Java线程池源码</a></p>
+</li>
+</ul>
+<h3 id="欢迎关注我的公众号"><a href="#欢迎关注我的公众号" class="headerlink" title="欢迎关注我的公众号"></a>欢迎关注我的公众号</h3><p>欢迎关注我的公众号，会经常分享一些技术文章和生活随笔～</p>
+<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/wechat.jpg" alt="技术旅途"></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>thanks<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/zhifubao.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -198,108 +264,128 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">分布式</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/26/介绍几种路由算法/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/01/12/Java集合源码系列-HashMap/" class="archive-article-date">
-  	<time datetime="2019-01-12T03:05:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-12</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2019/09/08/跳表-ConcurrentSkipListMap走马观花/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          跳表-ConcurrentSkipListMap走马观花
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/01/12/Java集合源码系列-HashMap/">Java集合源码系列-HashMap</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#算法接口"><span class="toc-number">1.</span> <span class="toc-text">算法接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#轮询算法-Round-Robin"><span class="toc-number">2.</span> <span class="toc-text">轮询算法(Round Robin)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#轮询带权重"><span class="toc-number">3.</span> <span class="toc-text">轮询带权重</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#随机算法"><span class="toc-number">4.</span> <span class="toc-text">随机算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一致性哈希算法"><span class="toc-number">5.</span> <span class="toc-text">一致性哈希算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一致性哈希带权重"><span class="toc-number">6.</span> <span class="toc-text">一致性哈希带权重</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他废话"><span class="toc-number">7.</span> <span class="toc-text">其他废话</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#往期回顾"><span class="toc-number">8.</span> <span class="toc-text">往期回顾</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#欢迎关注我的公众号"><span class="toc-number">9.</span> <span class="toc-text">欢迎关注我的公众号</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/01/01/再见，2018/" class="archive-article-date">
-  	<time datetime="2019-01-01T03:46:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-01</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/01/01/再见，2018/">再见，2018</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2019/">&laquo; Prev</a><a class="page-number" href="/archives/2019/">1</a><span class="page-number current">2</span>
-    </nav>
+  
+
   
 
 
@@ -323,8 +409,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
