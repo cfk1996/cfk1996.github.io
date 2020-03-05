@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="kunkun">
 <meta property="og:description" content="最近在看sofa-rpc的源码，今天把里面涉及到的路由模块中几个算法记录一下。 现在的很多服务都是由集群组成的，集群前会有一个负载均衡服务器来负责选择一个合适的服务器提供服务，让不同的服务器尽可能均衡的处理请求，这里面就涉及到如何作出选择，就产生了很多种负载均衡算法，需要根据项目场景选择一个适合的。">
 <meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/wechat.jpg">
-<meta property="og:updated_time" content="2019-10-26T11:44:44.291Z">
+<meta property="og:updated_time" content="2019-10-26T11:46:44.737Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="介绍几种负载均衡算法">
 <meta name="twitter:description" content="最近在看sofa-rpc的源码，今天把里面涉及到的路由模块中几个算法记录一下。 现在的很多服务都是由集群组成的，集群前会有一个负载均衡服务器来负责选择一个合适的服务器提供服务，让不同的服务器尽可能均衡的处理请求，这里面就涉及到如何作出选择，就产生了很多种负载均衡算法，需要根据项目场景选择一个适合的。">
@@ -207,7 +207,7 @@
 <h3 id="一致性哈希带权重"><a href="#一致性哈希带权重" class="headerlink" title="一致性哈希带权重"></a>一致性哈希带权重</h3><p>上面那个算法没有考虑权重的因素，考虑权重也很简单。在<code>Seletor</code>的构造函数中，我们固定为每个服务器创建128个节点，如果考虑权重，只需要在创建虚拟节点时，将创建的个数乘以权重系数，这样不同权重的服务器产生的虚拟节点个数与权重成正比。其他代码不需改动。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Selector</span><span class="params">(String interfaceId, String method, List&lt;ProviderInfo&gt; actualNodes, <span class="keyword">int</span> hashcode)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 创建虚拟节点环 （provider创建虚拟节点数 =  真实节点权重 * 32）</span></span><br><span class="line">    <span class="keyword">this</span>.virtualNodes = <span class="keyword">new</span> TreeMap&lt;Long, ProviderInfo&gt;();</span><br><span class="line">    <span class="comment">// 设置越大越慢，精度越高</span></span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">32</span>;</span><br><span class="line">    <span class="keyword">for</span> (ProviderInfo providerInfo : actualNodes) &#123;</span><br><span class="line">        <span class="comment">// 只需要修改一行代码，i &lt; num * providerInfo.getWeight()</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num * providerInfo.getWeight() / <span class="number">4</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] digest = HashUtils.messageDigest(providerInfo.getHost() + providerInfo.getPort() + i);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> h = <span class="number">0</span>; h &lt; <span class="number">4</span>; h++) &#123;</span><br><span class="line">                <span class="keyword">long</span> m = HashUtils.hash(digest, h);</span><br><span class="line">                virtualNodes.put(m, providerInfo);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="其他废话"><a href="#其他废话" class="headerlink" title="其他废话"></a>其他废话</h3><p>有段时间没写博客了，几个礼拜前想写<code>阻塞队列SynchronizedQueue源码分析</code>，我一直是边看边写的，写了一大半，有些关键的代码看不懂了，所以停止了那篇文章。同步、并发相关的代码理解难度比较大，我现在水平还不够，不能很好的理解，就不写出来误导大家，继续修炼～</p>
-<p>以后可能会更关注高层次一些的东西，比如框架源码，一些算法思想什么的，类似并发底层的文章，需要再积累一段时间。</p>
+<p>以后可能会更关注高层次一些的东西，比如框架源码，一些算法思想什么的。至于并发底层的文章，需要再积累一段时间。</p>
 <h3 id="往期回顾"><a href="#往期回顾" class="headerlink" title="往期回顾"></a>往期回顾</h3><ul>
 <li><p><a href="https://cfk1996.github.io/2019/02/28/Java%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90/" target="_blank" rel="external">Java动态代理原理剖析(一)</a></p>
 </li>
@@ -344,6 +344,11 @@
     </a>
   
   
+    <a href="/2020/03/05/The-java-util-concurrent-Synchronizer-Framework翻译/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">The java.util.concurrent Synchronizer Framework翻译</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
 </nav>
 
 
@@ -396,7 +401,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 陈飞坤
+    		&copy; 2020 陈飞坤
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -503,15 +508,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java并发</a>
               </li>
              
               <li class="article-tag-list-item">

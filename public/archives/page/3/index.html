@@ -6,19 +6,14 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Python descriptor 描述符 | kunkun</title>
+  <title>Archives | kunkun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近看Flask源码时发现很多不熟悉的语法，其中一个就是描述符，在config.py中出现，描述符的用处很多，是Python中很多特性的底层机制，如properties, methods, static methods, class methods和super()。 什么是描述符描述符一般是一个有绑定动作的属性对象，这个属性的获取、赋值、删除操作和途径被描述符协议重写。对象属性的正常获取顺序是这样">
-<meta name="keywords" content="Python">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Python descriptor 描述符">
-<meta property="og:url" content="http://yoursite.com/2018/07/13/descriptor/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="kunkun">
+<meta property="og:url" content="http://yoursite.com/archives/page/3/index.html">
 <meta property="og:site_name" content="kunkun">
-<meta property="og:description" content="最近看Flask源码时发现很多不熟悉的语法，其中一个就是描述符，在config.py中出现，描述符的用处很多，是Python中很多特性的底层机制，如properties, methods, static methods, class methods和super()。 什么是描述符描述符一般是一个有绑定动作的属性对象，这个属性的获取、赋值、删除操作和途径被描述符协议重写。对象属性的正常获取顺序是这样">
-<meta property="og:updated_time" content="2019-08-31T14:05:07.192Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python descriptor 描述符">
-<meta name="twitter:description" content="最近看Flask源码时发现很多不熟悉的语法，其中一个就是描述符，在config.py中出现，描述符的用处很多，是Python中很多特性的底层机制，如properties, methods, static methods, class methods和super()。 什么是描述符描述符一般是一个有绑定动作的属性对象，这个属性的获取、赋值、删除操作和途径被描述符协议重写。对象属性的正常获取顺序是这样">
+<meta name="twitter:title" content="kunkun">
   
     <link rel="alternative" href="/atom.xml" title="kunkun" type="application/atom+xml">
   
@@ -164,213 +159,63 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-descriptor" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      Python descriptor 描述符
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2018/05/29/建站/" class="archive-article-date">
+  	<time datetime="2018-05-29T09:11:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-29</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/05/29/建站/">建站</a>
     </h1>
   
 
-        
-        <a href="/2018/07/13/descriptor/" class="archive-article-date">
-  	<time datetime="2018-07-13T03:44:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近看Flask源码时发现很多不熟悉的语法，其中一个就是描述符，在config.py中出现，描述符的用处很多，是Python中很多特性的底层机制，如<code>properties</code>, <code>methods</code>, <code>static methods</code>, <code>class methods</code>和<code>super()</code>。</p>
-<h3 id="什么是描述符"><a href="#什么是描述符" class="headerlink" title="什么是描述符"></a>什么是描述符</h3><p>描述符一般是一个有绑定动作的属性对象，这个属性的获取、赋值、删除操作和途径被描述符协议重写。对象属性的正常获取顺序是这样的，比如想要获取<code>a.x</code>,那么首先查找<code>a.__dict__[&#39;x&#39;]</code>,如果找不到则查看<code>type(a).__dict__[&#39;x&#39;]</code>,如果还没有则查看父类的<code>__dict__</code>。</p>
-<p>Python中有很多协议，比如迭代对象的迭代器协议，上下文管理协议等，都是靠重写类中以<code>__</code>开头和结尾的魔法方法来实现的。描述符协议也不例外，只要实现了<code>__get__(self, instance, owner)</code>、<code>__set__(self, instance, value)</code>、<code>__delete__(self, instance)</code>中任意一个或全部的方法，这个类就变成了一个描述符。如果只定义了<code>__get__</code>,则这是一个<code>non-data descriptor</code>，定义了<code>__get__</code>和<code>__set__</code>两个方法的是<code>data descriptor</code>，这里的区别，后面会提到。实现这些方法后，对属性进行操作时就不走正常途径，而是调用这几个魔法方法。需要注意的是，描述符必须是一个新式类。</p>
-<a id="more"></a>
-<h3 id="为什么需要描述符"><a href="#为什么需要描述符" class="headerlink" title="为什么需要描述符"></a>为什么需要描述符</h3><p>写过的Java的应该有一些印象，类里的属性一般是<code>private</code>的，如果想要拿到这个属性，一般是通过一个<code>public</code>的<code>get_xxx</code>方法来获得属性，重新赋值时也是一个道理。但是这样虽然隐藏了属性，但是后续写代码时都得用<code>object.get_xxx()</code>来获取值，而不是<code>object.attr</code>,显然第二种方式更简单，更美观，所以Python这种简洁的语言就提供了这样的更简洁的实现方式—描述符协议。</p>
-<p>还有一种情况，假设有一个<code>Person</code>类，它有一个<code>age</code>属性，那么在对年龄赋值时是有一些限制的，比如必须是整数，必须大于0。所以应该在赋值时进行检查，这么一看好像赋值时又需要通过方法<code>xiaoming.age=cls.examine_age(1000)</code>,又不美观了，而描述符协议可以在背地里帮我们做这种检查，而我们还是可以使用<code>xiaoming.age=1000</code>这个更简洁的语句。</p>
-<p>这里有个我之前一直困惑的地方提一下，可能你们觉得不难，但是确实干扰了我很久。那就是这三个魔法方法定义在什么地方，还是回到上面那个例子，好像只有<code>Person</code>是一个类，所以我之前一直觉得应该定义在<code>Person</code>类中，但其实不是。魔法方法应该定义在一个<code>Age</code>类中，然后<code>age</code>属性是一个<code>Age</code>对象实例。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Age</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, age)</span>:</span></span><br><span class="line">        self.age = age</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, instance, owner)</span>:</span></span><br><span class="line">        print(<span class="string">'instance=&#123;&#125;, owner=&#123;&#125;'</span>.format(instance, owner))</span><br><span class="line">        <span class="keyword">return</span> self.age</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__set__</span><span class="params">(self, instance, value)</span>:</span></span><br><span class="line">        print(<span class="string">'instance=&#123;&#125;, value=&#123;&#125;'</span>.format(instance, value))</span><br><span class="line">        <span class="keyword">if</span> value &lt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> AttributeError(<span class="string">'age should &gt; 0'</span>)</span><br><span class="line">        self.age = value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span><span class="params">(object)</span>:</span></span><br><span class="line">    age = Age(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">xiaoming = Person()</span><br><span class="line">xiaoming.age = <span class="number">10</span></span><br><span class="line">print(xiaoming)</span><br><span class="line">print(xiaoming.age)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output::::::::</span></span><br><span class="line"><span class="comment"># &gt;&gt;&gt; instance=&lt;__main__.Person object at 0x107a24310&gt;, value=10</span></span><br><span class="line"><span class="comment"># &gt;&gt;&gt; &lt;__main__.Person object at 0x107a24310&gt;</span></span><br><span class="line"><span class="comment"># &gt;&gt;&gt; instance=&lt;__main__.Person object at 0x107a24310&gt;, owner=&lt;class '__main__.Person'&gt;</span></span><br><span class="line"><span class="comment"># &gt;&gt;&gt; 10</span></span><br></pre></td></tr></table></figure>
-<p>方法中的<code>instance</code>属性返回的是获取属性的那个对象，在这里就是<code>xiaoming</code>，<code>owner</code>是获取属性的对象的类，在这里就是<code>Person</code>。</p>
-<h3 id="描述符的调用机制"><a href="#描述符的调用机制" class="headerlink" title="描述符的调用机制"></a>描述符的调用机制</h3><p>上面提到了非描述符属性的获取途径，定义了描述符协议后，<code>obj.b</code>的操作将调用<code>b.__get__(obj)</code>这个方法来获取属性。描述符的调用机制根据调用对象是<strong>对象</strong>还是<strong>类</strong>有一些区别。</p>
-<p>描述符是通过<code>type.__getattribute__()</code>方法被调用，这也是为什么描述符必须是在新式类中的原因，继承自<code>object</code>的类被称为新式类，否则没有这个方法，则无法调用描述符的方法。</p>
-<p>对于对象来说，<code>object.__getattribute__()</code>会将<code>b.x</code> 转换为 <code>type(b).__dict__[&#39;x&#39;].__get__(b, type(b))</code>。这个转换通过下面这样的一个优先链：<code>data descriptors</code>大于实例变量，实例变量大于 <code>non-data descriptors</code>，如果存在<code>__getattr__()</code>，则<code>__getattr__()</code>优先级最低。完整的C实现在<a href="https://docs.python.org/2/c-api/object.html#c.PyObject_GenericGetAttr" title="PyObject_GenericGetAttr" target="_blank" rel="external"><code>PyObject_GenericGetAttr()</code></a> in <a href="https://github.com/python/cpython/tree/2.7/Objects/object.c" target="_blank" rel="external">Objects/object.c</a>.</p>
-<p>对于类来说，<code>object.__getattribute__()</code>会将 <code>B.x</code> 转换为<code>B.__dict__[&#39;x&#39;].__get__(None, B)</code>。Python实现如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__getattribute__</span><span class="params">(self, key)</span>:</span></span><br><span class="line">    <span class="string">"Emulate type_getattro() in Objects/typeobject.c"</span></span><br><span class="line">    v = object.__getattribute__(self, key)</span><br><span class="line">    <span class="keyword">if</span> hasattr(v, <span class="string">'__get__'</span>):</span><br><span class="line">        <span class="keyword">return</span> v.__get__(<span class="keyword">None</span>, self)</span><br><span class="line">    <span class="keyword">return</span> v</span><br></pre></td></tr></table></figure></p>
-<h3 id="描述符实例"><a href="#描述符实例" class="headerlink" title="描述符实例"></a>描述符实例</h3><p>上面提到了一个最简单的描述符实例，就是对属性进行取值或者赋值时进行额外的操作，同时保持代码的简洁。描述符在Python语言中本来也有很多的应用，但是能力不够，不能很好的理解其中的奥妙，就不误导大家了。主要是<code>Property</code>,<code>Function and method</code>和<code>static method and class method</code>这几个方面，给出链接，有兴趣的可以钻研一下。</p>
-<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="http://martyalchin.com/2007/nov/23/python-descriptors-part-1-of-2/" target="_blank" rel="external">Python Descriptors, Part 1 of 2</a></p>
-<p><a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="external">Descriptor HowTo Guide</a></p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>thanks<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/zhifubao.jpg">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/wechat.jpg">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/07/13/descriptor/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2018/05/29/Python多线程/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Python多线程
-        
-      </div>
-    </a>
   
   
-    <a href="/2018/08/13/gunicorn源码阅读/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">gunicorn源码阅读</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-        <div class="toc-container tooltip-left">
-            <i class="icon-font icon-category"></i>
-            <div class="tooltip tooltip-east">
-                <span class="tooltip-item">
-                </span>
-                <span class="tooltip-content">
-                    <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是描述符"><span class="toc-number">1.</span> <span class="toc-text">什么是描述符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么需要描述符"><span class="toc-number">2.</span> <span class="toc-text">为什么需要描述符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#描述符的调用机制"><span class="toc-number">3.</span> <span class="toc-text">描述符的调用机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#描述符实例"><span class="toc-number">4.</span> <span class="toc-text">描述符实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-number">5.</span> <span class="toc-text">参考链接</span></a></li></ol>
-                    </div>
-                </span>
-            </div>
-        </div>
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
+    
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/archives/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span>
+    </nav>
   
 
 
@@ -394,8 +239,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

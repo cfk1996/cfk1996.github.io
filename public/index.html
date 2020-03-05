@@ -161,6 +161,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-The-java-util-concurrent-Synchronizer-Framework翻译" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/05/The-java-util-concurrent-Synchronizer-Framework翻译/">The java.util.concurrent Synchronizer Framework翻译</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/05/The-java-util-concurrent-Synchronizer-Framework翻译/" class="archive-article-date">
+  	<time datetime="2020-03-05T08:23:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在看AQS相关的源码，比较晦涩，阅读之前本打算自己也写一篇博客，看完后自知水平不够，写出来估计也不能很好的阐述AQS的理念。我也看了不少讲解AQS的文章，大多数讲解还是不够清晰。在美团技术博客中一篇讲解AQS的文章的引用中发现AQS作者自己写过相关论文，所以打算翻译一下，做一个小小搬运工。(不全部翻译，想看原版文末有链接)</p>
+<p>读之前还是需要对AQS有一定的理解，可以看美团的这篇文章。<br><a href="https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html">从ReentrantLock的实现看AQS的原理及应用</a></p>
+<p><code>The java.util.concurrent Synchronizer Framework</code>是java并发容器作者Doug Lea关于并发框架AQS的论文，阐述了AQS框架的原理、设计、实现、使用以及性能。</p>
+        
+          <a class="article-more-a" href="/2020/03/05/The-java-util-concurrent-Synchronizer-Framework翻译/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java并发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/05/The-java-util-concurrent-Synchronizer-Framework翻译/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-介绍几种路由算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -905,89 +987,9 @@
 
 
   
-    <article id="post-Java集合源码系列-LinkedList" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/03/Java集合源码系列-LinkedList/">Java集合源码系列-LinkedList</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/03/Java集合源码系列-LinkedList/" class="archive-article-date">
-  	<time datetime="2019-02-03T07:22:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这是Java集合源码系列的第三篇了，准备来介绍一下<code>LinkedList</code>这个类,<code>LinkedList</code>常与<code>ArrayList</code>放在一起比较，都是<code>List</code>接口的实现类，但是底层的数据结构不同，导致它们在一些操作上各有优缺点，需要根据应用场景灵活选用<code>List</code>。<code>ArrayList</code>的细节上篇文章已经介绍过了，不了解的可以回过去看一下。<code>LinkedList</code>的底层实现是一个双向链表，同时也实现了<code>Deque</code>接口，因此也可以作为双向队列的一个实现，这是<code>LinkedList</code>相比<code>ArrayList</code>的另外一个重大特性。话不多说，直接进入源码分析阶段吧,按照惯例，依然是从使用集合的整个生命周期来作为行文路线，即创建–&gt;插入–&gt;获取–&gt;删除。</p>
-        
-          <a class="article-more-a" href="/2019/02/03/Java集合源码系列-LinkedList/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/03/Java集合源码系列-LinkedList/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -999,7 +1001,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 陈飞坤
+    		&copy; 2020 陈飞坤
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1106,15 +1108,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java并发</a>
               </li>
              
               <li class="article-tag-list-item">
