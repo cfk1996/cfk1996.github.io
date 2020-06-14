@@ -161,6 +161,94 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-jdk序列化与反序列化底层机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/13/jdk序列化与反序列化底层机制/">jdk序列化与反序列化底层机制</a>
+    </h1>
+  
+
+        
+        <a href="/2020/06/13/jdk序列化与反序列化底层机制/" class="archive-article-date">
+  	<time datetime="2020-06-13T12:22:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="唠嗑"><a href="#唠嗑" class="headerlink" title="唠嗑"></a>唠嗑</h3><p>好久没有写博客了，懈怠了，周一到周五工作，没时间写，周末想着放松放松，也不想写，一拖再拖。</p>
+<p>最近意识到正式工作快满一年了(稳定运营的游戏部门，进行玩法开发)，想回头想一想这一年有什么进步，却发现好像除了对业务更加熟悉一些，技术上并不知道有哪些明显的提升，问了下与我一起入职的同事，也有这样的困惑。这也许是业务部门的通病，公司论坛中也有很多人表示：一直维护老系统，如何提升技术，如何晋级等。还记得有个观点大概是这样的：</p>
+<pre><code>优化项目代码，对重复的代码抽象出通用的模块
+</code></pre><p>我们现在的项目中确实有许多不优雅的、重复的代码，虽然我知道它好像有点问题，但是我暂时没有能力去解决这个问题。</p>
+<p>前两天在研究一个并发的问题时，搜到了一个大佬的博客，发现大佬写了很多基础性的文章，意识到别人的成功并不是偶然，所以我还是先从基础入手吧，地基打好了再去尝试解决上层的问题。</p>
+        
+          <a class="article-more-a" href="/2020/06/13/jdk序列化与反序列化底层机制/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java基础</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/06/13/jdk序列化与反序列化底层机制/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-The-java-util-concurrent-Synchronizer-Framework翻译" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -903,90 +991,6 @@
 
 
   
-    <article id="post-高性能mysql" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/23/高性能mysql/">高性能mysql</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/23/高性能mysql/" class="archive-article-date">
-  	<time datetime="2019-02-23T13:40:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在看《高性能Mysql》,深入的学习一下mysql的相关知识及原理，并记录下相关知识点。记录的内容可能跳跃性较大，基于我自己主观意愿，需要一定的mysql基础。</p>
-<h3 id="1-mysql服务器逻辑架构"><a href="#1-mysql服务器逻辑架构" class="headerlink" title="1 mysql服务器逻辑架构"></a>1 mysql服务器逻辑架构</h3><p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2019/mysql.png" alt="mysql架构图"></p>
-<p>最上层的服务并不是mysql独有的，大多数基于网络的BS服务都有类似的架构。</p>
-<p>第二层架构是Mysql中比较有意思的部分，大多数mysql的核心服务功能都在这一层，包括查询解析、分析、优化、缓存等。</p>
-<p>第三层包含了存储引擎，存储引擎负责mysql中数据的存储和提取，不同的存储引擎有各自的优点和缺点，服务器通过API与存储引擎通信，这些接口屏蔽了不同存储引擎的差异，使得这些差异对上层的查询过程透明。</p>
-        
-          <a class="article-more-a" href="/2019/02/23/高性能mysql/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/23/高性能mysql/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1084,6 +1088,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -1092,15 +1100,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Java源码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java并发</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1120,11 +1128,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java并发</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>
