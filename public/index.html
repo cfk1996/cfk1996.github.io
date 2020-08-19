@@ -161,6 +161,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-CMS和G1介绍-翻译自oracle" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/15/CMS和G1介绍-翻译自oracle/">CMS和G1介绍(翻译自oracle)</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/15/CMS和G1介绍-翻译自oracle/" class="archive-article-date">
+  	<time datetime="2020-08-15T03:14:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们的游戏服务器用的是G1垃圾回收器，在学习的过程中找到一篇oracle的官方教程，觉得还不错，所以一边学习一边翻译一下，官方教程链接在下面。</p>
+<p><a href="https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html">Getting Started with the G1 Garbage Collector</a></p>
+<h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>这篇教程包括了如何在jvm中使用G1回收器的基础知识，并且可以学到G1的内部运行机制，关键的控制参数和一些gc日志基础。</p>
+<h2 id="耗时"><a href="#耗时" class="headerlink" title="耗时"></a>耗时</h2><p>1小时</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>文章介绍了g1的基础。在第一部分，介绍了JVM的整体概览结构，其中就包括垃圾回收器和一些性能相关的机制。接下来的一部分内容介绍了CMS垃圾回收器是如何在<code>Hotspot jvm</code>中工作的。再接下来，一步步的介绍g1是如何在hotspot jvm中运行的;紧接着是一些使用g1回收器时的关键jvm参数介绍，最后你会学到一些与g1相关的日志内容。</p>
+<p>跳过<code>硬件与软件要求</code>和<code>java language，jre，jdk,jvm</code>等基础内容介绍</p>
+        
+          <a class="article-more-a" href="/2020/08/15/CMS和G1介绍-翻译自oracle/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/15/CMS和G1介绍-翻译自oracle/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ThreadLocal源码分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -912,87 +993,6 @@
 
 
   
-    <article id="post-ConcurrentHashMap源码全解析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/11/ConcurrentHashMap源码全解析/">ConcurrentHashMap源码全解析</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/11/ConcurrentHashMap源码全解析/" class="archive-article-date">
-  	<time datetime="2019-04-11T08:43:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这篇文章将解析<code>ConcurrentHashMap</code>的源码，<code>ConcurrentHashMap</code>是一个支持并发检索及高并发性的哈希表实现。包含了与<code>HashTable</code>方法相对应的所有实现，但是又比<code>HashTable</code>高效。</p>
-<p>一般来说同步操作是通过锁来保证线程安全，那么提高并发性有三种优化方式，第一种是对不需要同步的方法不加锁;第二种是缩小加锁的粒度;第三种是通过CAS,即尝试通过不加锁实现同步。对于CAS不理解的，可以查阅相关资料了解下，对阅读本文和<code>ConcurrentHashMap</code>有帮助.</p>
-        
-          <a class="article-more-a" href="/2019/04/11/ConcurrentHashMap源码全解析/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/11/ConcurrentHashMap源码全解析/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1131,6 +1131,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">

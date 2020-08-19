@@ -161,6 +161,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ConcurrentHashMap源码全解析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/11/ConcurrentHashMap源码全解析/">ConcurrentHashMap源码全解析</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/11/ConcurrentHashMap源码全解析/" class="archive-article-date">
+  	<time datetime="2019-04-11T08:43:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇文章将解析<code>ConcurrentHashMap</code>的源码，<code>ConcurrentHashMap</code>是一个支持并发检索及高并发性的哈希表实现。包含了与<code>HashTable</code>方法相对应的所有实现，但是又比<code>HashTable</code>高效。</p>
+<p>一般来说同步操作是通过锁来保证线程安全，那么提高并发性有三种优化方式，第一种是对不需要同步的方法不加锁;第二种是缩小加锁的粒度;第三种是通过CAS,即尝试通过不加锁实现同步。对于CAS不理解的，可以查阅相关资料了解下，对阅读本文和<code>ConcurrentHashMap</code>有帮助.</p>
+        
+          <a class="article-more-a" href="/2019/04/11/ConcurrentHashMap源码全解析/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/11/ConcurrentHashMap源码全解析/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Java动态代理原理剖析-二-cglib" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -897,84 +978,6 @@
 
 
   
-    <article id="post-descriptor" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/13/descriptor/">Python descriptor 描述符</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/13/descriptor/" class="archive-article-date">
-  	<time datetime="2018-07-13T03:44:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近看Flask源码时发现很多不熟悉的语法，其中一个就是描述符，在config.py中出现，描述符的用处很多，是Python中很多特性的底层机制，如<code>properties</code>, <code>methods</code>, <code>static methods</code>, <code>class methods</code>和<code>super()</code>。</p>
-<h3 id="什么是描述符"><a href="#什么是描述符" class="headerlink" title="什么是描述符"></a>什么是描述符</h3><p>描述符一般是一个有绑定动作的属性对象，这个属性的获取、赋值、删除操作和途径被描述符协议重写。对象属性的正常获取顺序是这样的，比如想要获取<code>a.x</code>,那么首先查找<code>a.__dict__[&#39;x&#39;]</code>,如果找不到则查看<code>type(a).__dict__[&#39;x&#39;]</code>,如果还没有则查看父类的<code>__dict__</code>。</p>
-<p>Python中有很多协议，比如迭代对象的迭代器协议，上下文管理协议等，都是靠重写类中以<code>__</code>开头和结尾的魔法方法来实现的。描述符协议也不例外，只要实现了<code>__get__(self, instance, owner)</code>、<code>__set__(self, instance, value)</code>、<code>__delete__(self, instance)</code>中任意一个或全部的方法，这个类就变成了一个描述符。如果只定义了<code>__get__</code>,则这是一个<code>non-data descriptor</code>，定义了<code>__get__</code>和<code>__set__</code>两个方法的是<code>data descriptor</code>，这里的区别，后面会提到。实现这些方法后，对属性进行操作时就不走正常途径，而是调用这几个魔法方法。需要注意的是，描述符必须是一个新式类。</p>
-        
-          <a class="article-more-a" href="/2018/07/13/descriptor/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/13/descriptor/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1113,6 +1116,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
