@@ -182,272 +182,14 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>我们的游戏服务器用的是G1垃圾回收器，在学习的过程中找到一篇oracle的官方教程，觉得还不错，所以一边学习一边翻译一下，官方教程链接在下面。</p>
-<p><a href="https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html" target="_blank" rel="external">Getting Started with the G1 Garbage Collector</a></p>
-<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><h4 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h4><p>这篇教程包括了如何在jvm中使用G1回收器的基础知识，并且可以学到G1的内部运行机制，关键的控制参数和一些gc日志基础。</p>
-<h4 id="耗时"><a href="#耗时" class="headerlink" title="耗时"></a>耗时</h4><p>1小时</p>
-<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>文章介绍了g1的基础。在第一部分，介绍了JVM的整体概览结构，其中就包括垃圾回收器和一些性能相关的机制。接下来的一部分内容介绍了CMS垃圾回收器是如何在<code>Hotspot jvm</code>中工作的。再接下来，一步步的介绍g1是如何在hotspot jvm中运行的;紧接着是一些使用g1回收器时的关键jvm参数介绍，最后你会学到一些与g1相关的日志内容。</p>
+<p><a href="https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html">Getting Started with the G1 Garbage Collector</a></p>
+<h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>这篇教程包括了如何在jvm中使用G1回收器的基础知识，并且可以学到G1的内部运行机制，关键的控制参数和一些gc日志基础。</p>
+<h2 id="耗时"><a href="#耗时" class="headerlink" title="耗时"></a>耗时</h2><p>1小时</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>文章介绍了g1的基础。在第一部分，介绍了JVM的整体概览结构，其中就包括垃圾回收器和一些性能相关的机制。接下来的一部分内容介绍了CMS垃圾回收器是如何在<code>Hotspot jvm</code>中工作的。再接下来，一步步的介绍g1是如何在hotspot jvm中运行的;紧接着是一些使用g1回收器时的关键jvm参数介绍，最后你会学到一些与g1相关的日志内容。</p>
 <p>跳过<code>硬件与软件要求</code>和<code>java language，jre，jdk,jvm</code>等基础内容介绍</p>
-<h3 id="探索jvm架构"><a href="#探索jvm架构" class="headerlink" title="探索jvm架构"></a>探索jvm架构</h3><h4 id="Hotspot架构"><a href="#Hotspot架构" class="headerlink" title="Hotspot架构"></a>Hotspot架构</h4><p><strong>(Hotspot jvm 全部用jvm代替)</strong></p>
-<p>JVM的架构支持强大的基础特性和能力支持，提供了实现高性能和大规模拓展性的能力。比如说JIT编译器在运行时生成高性能的本地机器指令来提高性能。除此之外，通过不断的优化运行时环境和多线程的垃圾回收功能，即使在最大的可用计算机系统里jvm也提供了高的伸缩性。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/jvm-Architecture.png" alt="jvm架构"></p>
-<p>jvm的主要构成组件包括类加载器，运行时数据存储区和执行引擎。</p>
-<h4 id="关键组件"><a href="#关键组件" class="headerlink" title="关键组件"></a>关键组件</h4><p>jvm的组件中有三个是关注于性能调优的(heap, garbase collector, jit)。heap是对象存储的地方，这块区域会被垃圾回收器管理，大多数调优的方式都与调整堆大小和选择最适合程序状况的垃圾收集器有关。JIT编译器对性能也有很大的影响，但是这是随着jvm的版本更新的。</p>
-<h3 id="性能基础"><a href="#性能基础" class="headerlink" title="性能基础"></a>性能基础</h3><p>通常对java应用调优时关注两个主要的指标：响应速度或者吞吐量。</p>
-<ul>
-<li>响应速度：应用能以多快的速度响应一个请求<ul>
-<li>网点返回一个网页的时间</li>
-<li>一次数据库查询的时间</li>
-<li>…</li>
-</ul>
-</li>
-</ul>
-<p>对注重响应时间的应用来说，长时间的停顿时间是不可接受的，必须在很短的时间内响应请求</p>
-<ul>
-<li>吞吐量：在一段时间内，处理的请求数量<ul>
-<li>一段时间内完成的事务数量</li>
-<li>一小时内数据库可以完成的查询次数</li>
-<li>…</li>
-</ul>
-</li>
-</ul>
-<p>对注重吞吐量的应用来说，更关注一段时间内的工作总量，偶尔的单个请求耗时长点是可以接受的</p>
-<h3 id="g1垃圾回收器"><a href="#g1垃圾回收器" class="headerlink" title="g1垃圾回收器"></a>g1垃圾回收器</h3><p>g1垃圾回收器是用于服务端的，是针对大内存的多处理器的应用。它可以设立一个最大停顿时间，并且有很高的可能性达到这个目标同时也可以达到很大的吞吐量。g1垃圾收集器在JDK update4及之后的版本都已经支持了。g1收集器是为了这样的应用设计的：</p>
-<ol>
-<li>可以像CMS一样与应用线程并行</li>
-<li>压缩释放的内存并且不增加gc引起的暂停时间</li>
-<li>需要可预测的gc停顿持续时间</li>
-<li>不想丢失大量的吞吐量性能</li>
-<li>不想增加堆的大小</li>
-</ol>
-<p>g1计划用于长期替换cms。对比g1和cms，有很多的不同让g1成为一个更好的选择。其中一个是g1是一个可以压缩内存的收集器，g1的压缩紧密并且划分为更多的region，可以避免细粒度的空闲队列来分配内存。这大大的简化了垃圾收集器，并且解决了内存碎片的问题。同时g1提供了更加可供的gc停顿时间，允许用户指定它们期望的停顿目标。</p>
-<h4 id="g1运行概述"><a href="#g1运行概述" class="headerlink" title="g1运行概述"></a>g1运行概述</h4><p>旧的垃圾收集器(serial, parallel, CMS)都将堆划分为大小固定的三块区域：年轻代，老年代和永久代。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/HeapStructure.png" alt="HeapStructure"></p>
-<p>所有对象最终都属于这三个部分之一。</p>
-<p>但是g1使用了一种不同的方式</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/g1heap.png" alt="g1heap"></p>
-<p>堆被划分为一堆大小相等的区域，每一个都是一片连续的虚拟内存。尽管这些region还是像旧收集器一样分成三种状态(eden,survivor,old)，但是它们的大小不是固定的，这提供了更加灵活的内存使用方式。</p>
-<p>g1执行垃圾回收的过程与cms很相似。G1首先进行一次并发的全局标记过程来决定堆中活的对象。标记过程结束后，G1知道哪些region大部分是空的，然后它首先收集这些区域并通常可以释放很多的空闲空间；这也是为什么G1被称之为垃圾优先收集器。顾名思义，G1专注收集和压缩那些充满可回收对象(即垃圾对象)的区域。G1使用一种叫做停顿预测模型来达到用户设定的停顿时间目标，并基于这个时间只选取一部分区域进行回收。</p>
-<p>被G1认定为可以回收的区域通过<code>evacuation</code>(不会翻译)的方式来收集，G1从一个或多个这样的区域中把对象复制到堆中其他的一个region中，并且在这个过程中会压缩和释放内存。在多处理器的系统中，这步操作是并行的，可以减少停顿时间和增加吞吐量。因此随着每一次的垃圾回收，G1在用户设计的时间内不断的减少碎片。相比于cms和paralleold，G1表现出的能力更加优秀。CMS不能够压缩内存，ParalleOld只能够压缩整个head，导致来不可控的停顿时间。</p>
-<p>必须注意到G1并不是一个实时的收集器。它以很高的可能性去满足用户设定的停顿时间要求，但是不是一定可以达到这个目标。基于上一次垃圾回收的数据，G1会估计在用户指定时间内可以回收多少个region。因此，这个收集器拥有收集一个区域耗时的合理的统计模型，并决定选择哪一个和选择多少个region来执行回收。</p>
-<blockquote>
-<p>G1有与应用线程并发的阶段(refinement,marking,cleanup)，也有并行的(多处理器，stop the world)阶段。full gc依然是单线程的，但是应该对应用调优来避免full gc。</p>
-</blockquote>
-<h4 id="G1-footprint-脚印？"><a href="#G1-footprint-脚印？" class="headerlink" title="G1 footprint(脚印？)"></a>G1 footprint(脚印？)</h4><p>如果你的应用从ParalleOld或者cms转换到G1，你很有可能发现内存变大了，这很大程度上与G1用到的“记数”数据结构有关，比如<code>Remembered set</code>和<code>Collection set</code>。</p>
-<p><code>Remembered Set</code>记录一个区域内的对象引用，每个region都有这样的set。Rset可以提供并行和独立收集一个区域的能力，Rset导致的内存变化的影响在5%内。</p>
-<p><code>Collection Set</code>记录在一次gc中将要被回收的区域，所有在CSet中的活对象都会在gc中被擦除或者复制移动。CSet对内存的影响小于1%。</p>
-<h4 id="推荐使用G1的情景"><a href="#推荐使用G1的情景" class="headerlink" title="推荐使用G1的情景"></a>推荐使用G1的情景</h4><p>G1最关注的是提供一种大内存且低GC延迟的方法。这意味着大于等于6GB的堆内存，可以稳定的可预测的将停顿时间控制在小于0.5秒的时间内。</p>
-<p>如果现在有应用使用ParalleOld或者CMS收集器，并且它们具有如下这些特性，将收集器转换为G1是有帮助的：</p>
-<ol>
-<li>full gc太频繁或者持续时间久</li>
-<li>对象分配律或者提升率差异大</li>
-<li>不希望长时间的gc收集和压缩耗时(大于0.5秒)</li>
-</ol>
-<p>如果跑的好好的，也可以不更换为G1.</p>
-<h3 id="回顾CMS的gc过程"><a href="#回顾CMS的gc过程" class="headerlink" title="回顾CMS的gc过程"></a>回顾CMS的gc过程</h3><p>CMS回收old区域时通过将大多数回收工作变成与应用线程并发的方式来减小垃圾回收的停顿耗时。一般来说，CMS不会复制和压缩活的对象，如果出现碎片化的问题，那么就需要分配更大的内存。</p>
-<p>NOTE: CMS在年轻代使用与parallel相同的算法</p>
-<h4 id="CMS收集阶段"><a href="#CMS收集阶段" class="headerlink" title="CMS收集阶段"></a>CMS收集阶段</h4><p>CMS收集器回收老年代时有如下这些过程:</p>
-<ol>
-<li>初始标记(stop the world)<br> 那些老年代中可以被年轻代对象访问的对象会被标记，这个时间相对来说比较短。</li>
-<li>并发标记阶段<br> 在应用线程执行时，并发的遍历寻找老年代的可达对象。然后从已标记的对象开始扫描，并从根开始标记所有可访问对象。CMS过程中分配的对象会被立马标记为活的</li>
-<li>再标记阶段(stw)<br> 寻找那些在并发标记中漏掉的对象</li>
-<li>并发清除<br> 回收标记阶段找到的不可达对象，回收死亡对象时把这些对象的内存空间加到空闲链表(用于后续的内存分配)，这个过程可以合并空间空间。需要注意的是：这个过程活的对象并没有被移动</li>
-<li>重置阶段<br> 清除gc过程产生的数据结构，准备下一次gc</li>
-</ol>
-<h4 id="回顾CMS垃圾收集的过程"><a href="#回顾CMS垃圾收集的过程" class="headerlink" title="回顾CMS垃圾收集的过程"></a>回顾CMS垃圾收集的过程</h4><p>接下来，一步步的回顾垃圾收集的过程。</p>
-<ol>
-<li>CMS收集器的堆结构</li>
-</ol>
-<p>堆被划分为三块区域。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/cmsHeap.png" alt="cms堆结构"></p>
-<p>年轻代被分为一个eden区和两个survivor区。老年代是一片连续的空间，垃圾收集是在原地发生的。除非发生full gc，不然不会发生压缩。</p>
-<ol start="2">
-<li>CMS的年轻代回收机制</li>
-</ol>
-<p>年轻代用绿色标记，老年代用蓝色。下图是程序运行一段时间后，内存可能的状态。对象零散的分散在老年代。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/youngGC.png" alt="youngGC"></p>
-<p>使用CMS时，老年代在原地被回收，它们不会被移动，这些堆空间不会发生压缩，除非发生一次full gc。</p>
-<ol start="3">
-<li>年轻代回收</li>
-</ol>
-<p>eden区和survivor区的活对象会被复制到另外一个survivor区。那些老对象达到年龄阈值时会晋升到老年代。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide3.png" alt="年轻代回收"></p>
-<ol start="4">
-<li>年轻代回收后</li>
-</ol>
-<p>年轻代回收后，eden区域和其中一个survivor会被清空。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide4.png" alt="after young gc"></p>
-<p>新晋升的对象用深蓝色标记。绿色的对象是在年轻代中存活下的但是没有晋升的对象。</p>
-<ol start="5">
-<li>CMS老年代回收</li>
-</ol>
-<p>CMS会有两个stop the world阶段：初始标记和再标记阶段。当老年代的占用内存达到一个比例时，CMS就开始了。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide5.png" alt="老年代回收"></p>
-<p>(1)初始化标记是一个很短的停顿，活的对象会被标记(2)并发标记阶段，在应用线程运行时寻找活的对象(3)在重标记阶段，寻找在第二个阶段被漏掉的活对象</p>
-<ol start="6">
-<li>并发清除阶段</li>
-</ol>
-<p>那些在前几个阶段没有被标记的对象会被回收，但没有被压缩。<br>(图片与上一个一样)</p>
-<ol start="7">
-<li>擦除后</li>
-</ol>
-<p>在擦除阶段后，可以看到有很大的一部分内存被释放了，也可以看到内存没有被压缩。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide7.png" alt="擦除后"></p>
-<p>最后CMS会进入第五阶段，清除一些数据结构然后准备下一次老年代内存占用达到阈值。</p>
-<h3 id="一步步介绍G1的过程"><a href="#一步步介绍G1的过程" class="headerlink" title="一步步介绍G1的过程"></a>一步步介绍G1的过程</h3><p>G1使用了一种不同的方式来分配堆</p>
-<ol>
-<li>G1堆结构</li>
-</ol>
-<p>堆被划分为很多固定大小的区域，区域的大小是在jvm启动时设定的，通常来说，jvm会划分大概2000个区域，区域的大小1到32MB.</p>
-<ol start="2">
-<li>G1堆分配</li>
-</ol>
-<p>事实上，这些区域在逻辑上被映射为eden, survivor和old三种角色。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/g1heap.png" alt="g1heap"></p>
-<p>区域的颜色代表来它所属的角色。活的对象会从一个区域复制和移动到另一个区域。区域的回收有stw和非stw阶段。</p>
-<p>除了上面展示的三种角色，还有第四种被称作大对象的区域。这些区域是用来存放那些比区域大小的一半还大的对象，这些区域里剩下的空间将不会被使用到。</p>
-<p>NOTE:在这篇文章发表时，收集大对象还有被优化，因此需要避免创建大对象。</p>
-<ol start="3">
-<li>G1年轻代</li>
-</ol>
-<p>堆被划分为大约2000个区域，大小可以是1MB到32MB这个范围。蓝色区域存储老年代对象，绿色区域存储年轻代对象，老年代并不需要像CMS那样是连续的。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide10.png" alt="g1年轻代"></p>
-<ol start="4">
-<li>一次年轻代gc</li>
-</ol>
-<p>活对象会被复制和移动到一个或多个survivor区域。如果达到年龄阈值，一些对象会晋升到老年代区域。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide11.png" alt="一次young gc"></p>
-<p>这是一个stw的停顿。为下一次gc计算eden的大小和survivor的大小。计数信息会被用来计算来满足用户设定的停顿时间</p>
-<ol start="5">
-<li>年轻代gc结束后</li>
-</ol>
-<p>活对象已经被复制到幸存区或者老年区。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide12.png" alt="年轻代gc"></p>
-<p>可以用下面这些来总结下G1的年轻代。</p>
-<ol>
-<li>堆被划分为很多区域</li>
-<li>年轻代是一部分不连续的区域的组合。这样可以很容易将年轻代的大小改变</li>
-<li>年轻代垃圾回收会stw，所有应用线程都会停止</li>
-<li>垃圾回收是多线程并发的</li>
-<li>活对象被复制到新的survivor区域或者old区。</li>
-</ol>
-<h3 id="G1的老年代垃圾回收"><a href="#G1的老年代垃圾回收" class="headerlink" title="G1的老年代垃圾回收"></a>G1的老年代垃圾回收</h3><p>像CMS收集器一样，G1被设计为一个老年代低停顿时间的收集器。下面的表格介绍了G1回收老年代的几个阶段。</p>
-<ol>
-<li>初始化标记(stw)<br> 这是一次stw活动，会伴随着一次young gc。标记幸存者区域，这个区域可能有对老年代的引用</li>
-<li>根区域扫描<br> 扫描幸存者区寻找对老年代的引用。这个过程与应用线程一起运行。</li>
-<li>并发标记<br> 在整个堆中寻找活对象。与应用线程一起运行。这个阶段可以被young gc打断。</li>
-<li>再标记(stw)<br> 完成对堆中活对象的标记。使用了一种叫做<code>snapshot-at-the-beginning (SATB)</code>的算法，比CMS中的算法要快的多</li>
-<li>清除阶段(stw和并发都有)<ul>
-<li>对活对象和完全的空闲区域计数(stw)</li>
-<li>清除Remembered Sets(stw)</li>
-<li>重置空的区域并把它们放入空闲链表(并发)<br>*. 复制阶段(stw)<br>这是停顿应用线程来擦除和复制活对象到没有使用过的区域的阶段。如果在年轻代发生，那么gc日志记录为<code>[GC pause (young)]</code>，如果在年轻代和老年代都发生了，gc日志记录为<code>[GC Pause (mixed)]</code></li>
-</ul>
-</li>
-</ol>
-<h4 id="一步步分析G1老年代垃圾回收"><a href="#一步步分析G1老年代垃圾回收" class="headerlink" title="一步步分析G1老年代垃圾回收"></a>一步步分析G1老年代垃圾回收</h4><p>上面定义了G1老年代回收的几个阶段，下面看下它们如何与老年代交互。</p>
-<ol>
-<li>初始化标记</li>
-</ol>
-<p>对活对象的初始化标记伴随着一次young gc，在日志里被记录为<code>GC pause (young)(inital-mark)</code></p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide13.png" alt="初始化标记"></p>
-<ol start="2">
-<li>并发标记阶段</li>
-</ol>
-<p>如果空的区域(图中打X的区域)被找到了，它们会在再标记阶段立马被清除。同时也会计算决定活跃度的信息。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide14.png" alt="并发标记阶段"></p>
-<ol start="3">
-<li>再标记阶段</li>
-</ol>
-<p>空区域会立马被回收，现在可以计算所有区域的活跃度信息。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide15.png" alt="再标记阶段"></p>
-<ol start="4">
-<li>复制/清除阶段</li>
-</ol>
-<p>G1选出最低活跃度的一些区域，因为这些区域可以被最快速的回收。然后这些区域会随着一次young gc一起被回收。在gc日志里这被记录为<code>[GC pause (mixed)]</code>。所以年轻代和老年代都会一起被回收。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide16.png" alt="复制清除"></p>
-<ol start="5">
-<li>复制清除后</li>
-</ol>
-<p>被选中的低活跃度的区域被回收和压缩成图中深蓝色和深绿色的区域。</p>
-<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/Slide17.png" alt="复制清除后"></p>
-<h4 id="总结g1老年代GC"><a href="#总结g1老年代GC" class="headerlink" title="总结g1老年代GC"></a>总结g1老年代GC</h4><ol>
-<li>并发标记阶段<ul>
-<li>活跃度信息会在应用线程运行时并发的被计算</li>
-<li>区域的活跃度信息决定了在复制清除阶段哪些区域是最适合被回收的</li>
-<li>没有像CMS那样的清除阶段</li>
-</ul>
-</li>
-<li>再标记阶段<ul>
-<li>使用一种远远好于CMS的、叫做Snapshot-at-the-Beginning (SATB)的算法</li>
-<li>完全空闲的区域会被回收</li>
-</ul>
-</li>
-<li>复制/清除阶段<ul>
-<li>年轻代和老年代一起被回收</li>
-<li>老年代的区域根据活跃度信息来选择</li>
-</ul>
-</li>
-</ol>
-<h3 id="命令行选项和最佳实践"><a href="#命令行选项和最佳实践" class="headerlink" title="命令行选项和最佳实践"></a>命令行选项和最佳实践</h3><p>这一章节会介绍G1的一些命令行选项。</p>
-<h4 id="基础命令行参数"><a href="#基础命令行参数" class="headerlink" title="基础命令行参数"></a>基础命令行参数</h4><p>开启G1垃圾收集器: <code>-XX:+UseG1GC</code></p>
-<p>下面有一段启动demo程序的jvm参数。</p>
-<p><code>java -Xmx50m -Xms50m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -jar c:\javademos\demo\jfc\Java2D\Java2demo.jar</code></p>
-<h4 id="关键命令行开关"><a href="#关键命令行开关" class="headerlink" title="关键命令行开关"></a>关键命令行开关</h4><p><code>-XX:MaxGCPauseMillis=200</code> 设置最大gc停顿时间。JVM会尽量达到这个条件，所以有时候停顿时间可能会超过设置的目标。默认值是200毫秒。</p>
-<p><code>-XX:InitiatingHeapOccupancyPercent=45</code> 当对象占用达到<strong>整个堆</strong>的45%时，启动一次老年代GC。如果这个值为0，则进行常量的gc循环。默认值是45.</p>
-<h4 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h4><ol>
-<li>不要设置年轻代的大小</li>
-</ol>
-<p>当明确的通过<code>-Xmn</code>设置年轻代的大小时，G1收集器就不会响应我们设置的停顿时间目标；G1也不能够根据需要来扩大或者收缩年轻代的空间，因为年轻代的大小被设定为固定值</p>
-<ol start="2">
-<li>响应时间指标</li>
-</ol>
-<p>相比于将响应平均时间(ART)设置为<code>-XX:MaxGCPauseMillis</code>的参数，可以把这个值设置为目标响应时间的90%或者更多。这意味着90%的用户可以在设定的时间内完成一次请求。记住，JVM不能保证达到这个停顿时间。</p>
-<ol start="3">
-<li>Evacuation(疏散？)失败</li>
-</ol>
-<p>无论GC过程发生在生存者还是晋升对象，当JVM的堆区域用完时，会抛出一次晋升失败。因为区域个数已经最大来，所以堆无法拓展。当使用了<code>-XX:+PrintGCDetails</code>参数时，GC日志里会为这种情况标记为<code>to-space overflow</code>。</p>
-<p>这是一个昂贵的过程：</p>
-<ul>
-<li>GC还得继续，所以空间必须被释放</li>
-<li>复制失败的对象必须保存在原地</li>
-<li>任何Cset中保存的区域的RSet的更新都需要重新生成</li>
-<li>所有这些操作都很昂贵</li>
-</ul>
-<ol start="4">
-<li>如何避免疏散失败</li>
-</ol>
-<ul>
-<li>增大堆大小<ul>
-<li>增大<code>-XX:G1ReservePercent=n</code>，默认值是10</li>
-<li>G1通过保留一部分空间来设定堆的最大值，以防<code>to space</code>发生</li>
-</ul>
-</li>
-<li>更早的开始GC周期</li>
-<li>通过设置<code>-XX:ConcGCThreads=n</code>参数来使用更多的线程进行GC</li>
-</ul>
-<h4 id="关键jvm参数列表"><a href="#关键jvm参数列表" class="headerlink" title="关键jvm参数列表"></a>关键jvm参数列表</h4><p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/g1_switches.png" alt=""></p>
-<h3 id="GC日志"><a href="#GC日志" class="headerlink" title="GC日志"></a>GC日志</h3><p>最后一个话题是通过日志信息来分析GC的性能。这部分简单介绍了下一些可以收集数据的参数和日志里会打印的信息。</p>
-<h4 id="设置日志详细等级"><a href="#设置日志详细等级" class="headerlink" title="设置日志详细等级"></a>设置日志详细等级</h4><p>你可以设置三种不同的日志详细等级。</p>
-<p>(1) <code>-verbosegc</code> 等价于<code>-XX:+PrintGc</code>将日志等级设为<strong>好</strong>，示例输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[GC pause (G1 Humongous Allocation) (young) (initial-mark) 24M- &gt;21M(64M), 0.2349730 secs]</span><br><span class="line">[GC pause (G1 Evacuation Pause) (mixed) 66M-&gt;21M(236M), 0.1625268 secs]</span><br></pre></td></tr></table></figure>
-<p>(2) <code>-XX:+PrintGCDetails</code>将日志等级设置为<strong>更好</strong>，它输出了下面这些信息：</p>
-<ul>
-<li>每个阶段的平均，最小，最大时间</li>
-<li>Root Scan, RSet Updating (with processed buffers information), RSet Scan, Object Copy, Termination (with number of attempts).(太难翻译了)</li>
-<li>还有一些其他耗时：选择CSET的时间，引用处理，引用进队和释放CSet的时间</li>
-<li>展示eden, survivors, total heap的占用大小</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[Ext Root Scanning (ms): Avg: 1.7 Min: 0.0 Max: 3.7 Diff: 3.7]</span><br><span class="line">[Eden: 818M(818M)-&gt;0B(714M) Survivors: 0B-&gt;104M Heap: 836M(4096M)-&gt;409M(4096M)]</span><br></pre></td></tr></table></figure>
-<p>(3) <code>-XX:+UnlockExperimentalVMOptions -XX:G1LogLevel=finest</code>将日志等级设置为<strong>最好</strong>，除了(2)的内容，还包括单个线程的信息。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[Ext Root Scanning (ms): 2.1 2.4 2.0 0.0</span><br><span class="line">           Avg: 1.6 Min: 0.0 Max: 2.4 Diff: 2.3]</span><br><span class="line">       [Update RS (ms):  0.4  0.2  0.4  0.0</span><br><span class="line">           Avg: 0.2 Min: 0.0 Max: 0.4 Diff: 0.4]</span><br><span class="line">           [Processed Buffers : 5 1 10 0</span><br><span class="line">           Sum: 16, Avg: 4, Min: 0, Max: 10, Diff: 10]</span><br></pre></td></tr></table></figure>
-<h4 id="确定时间"><a href="#确定时间" class="headerlink" title="确定时间"></a>确定时间</h4><p>有一些参数决定了gc日志中的时间如何展示。</p>
-<p>(1) <code>-XX:+PrintGCTimeStamps</code> jvm启动以来的耗时来展示时间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.729: [GC pause (young) 46M-&gt;35M(1332M), 0.0310029 secs]</span><br></pre></td></tr></table></figure>
-<p>(2) <code>-XX:+PrintGCDateStamps</code> 日期形式的时间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2012-05-02T11:16:32.057+0200: [GC pause (young) 46M-&gt;35M(1332M), 0.0317225 secs]</span><br></pre></td></tr></table></figure>
-<h4 id="理解G1日志"><a href="#理解G1日志" class="headerlink" title="理解G1日志"></a>理解G1日志</h4><p>为了让大家理解G1的日志，这部分介绍了一些GC日志的实际输出的术语。下面的例子提供了日志的输出，并对其中的术语和数值进行解释。</p>
-<p>NOTE: 更详细的日志介绍可以看<a href="https://blogs.oracle.com/poonam/understanding-g1-gc-logs" target="_blank" rel="external">Poonam Bajaj’s Blog post on G1 GC logs</a></p>
-<p>这部分比较晦涩，打住了。可以看看上面的链接，详细的介绍了gc日志～</p>
-
+        
+          <a class="article-more-a" href="/2020/08/15/CMS和G1介绍-翻译自oracle/#more">more >></a>
+        
       
 
       
@@ -1376,15 +1118,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">分布式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分布式</a>
               </li>
              
               <li class="article-tag-list-item">
