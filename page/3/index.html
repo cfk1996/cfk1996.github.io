@@ -161,6 +161,86 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-gunicorn源码阅读" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/13/gunicorn源码阅读/">gunicorn源码阅读</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/13/gunicorn源码阅读/" class="archive-article-date">
+  	<time datetime="2018-08-13T09:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h2><p>首先程序的入口为<code>gunicorn/app/wsgiapp</code>这个模块。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""\</span></span><br><span class="line"><span class="string">    The ``gunicorn`` command line runner for launching Gunicorn with</span></span><br><span class="line"><span class="string">    generic WSGI applications.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">from</span> gunicorn.app.wsgiapp <span class="keyword">import</span> WSGIApplication</span><br><span class="line">    WSGIApplication(<span class="string">"%(prog)s [OPTIONS] [APP_MODULE]"</span>).run()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    run()</span><br></pre></td></tr></table></figure>
+<p><code>WSGIApplication</code>这个类继承于<code>Application</code>,然后继承于<code>BaseApplication</code>.而且这三个类只有<code>BaseApplication</code>是有构造函数的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, usage=None, prog=None)</span>:</span></span><br><span class="line">    self.usage = usage</span><br><span class="line">    self.cfg = <span class="keyword">None</span></span><br><span class="line">    self.callable = <span class="keyword">None</span></span><br><span class="line">    self.prog = prog</span><br><span class="line">    self.logger = <span class="keyword">None</span></span><br><span class="line">    self.do_load_config()</span><br></pre></td></tr></table></figure>
+<p>这里面<code>useage, prog</code>就是两个字符串，忽略，其他的下面分析。赋值完后进入<code>do_load_config</code>方法。这个方法做了两件事，第一件是将一个Config对象赋值<code>给self.cfg</code>参数。这个对象可以从命令行中解析参数，将一些配置绑定。第二件是调用一个在<code>Application</code>中才实现的方法<code>load_config</code>。这个方法通过各种途径将参数绑定到cfg对象中,其中包括调用一次<code>WSGIApplicagion</code>的init方法，同样也是绑定相关参数。</p>
+        
+          <a class="article-more-a" href="/2018/08/13/gunicorn源码阅读/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/13/gunicorn源码阅读/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-descriptor" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -682,10 +762,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分布式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
@@ -698,11 +774,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color4">分布式</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
             
             <div class="clearfix"></div>
