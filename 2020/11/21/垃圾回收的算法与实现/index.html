@@ -6,14 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: 数据库 | kunkun</title>
+  <title>垃圾回收的算法与实现 | kunkun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="kunkun">
-<meta property="og:url" content="http://yoursite.com/tags/数据库/index.html">
+  <meta name="description" content="最近在看《垃圾回收算法与实现》这本书，稍微做些记录。 这本书分为两部分，算法篇和实现篇，算法篇通过伪代码的方式介绍了三种最基本的gc算法：标记清除，引用计数，复制算法以及由它们延展开的一些算法思想。实现篇介绍了已有的几种语言的垃圾回收具体实现。 本篇文章主要记录算法篇相关的知识点，对实现感兴趣的可以阅读下这本书。 前言GC的历史悠久，其基础却又没有太大变化。1960年代后提出了三种GC算法  GC">
+<meta name="keywords" content="基础,GC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="垃圾回收的算法与实现">
+<meta property="og:url" content="http://yoursite.com/2020/11/21/垃圾回收的算法与实现/index.html">
 <meta property="og:site_name" content="kunkun">
+<meta property="og:description" content="最近在看《垃圾回收算法与实现》这本书，稍微做些记录。 这本书分为两部分，算法篇和实现篇，算法篇通过伪代码的方式介绍了三种最基本的gc算法：标记清除，引用计数，复制算法以及由它们延展开的一些算法思想。实现篇介绍了已有的几种语言的垃圾回收具体实现。 本篇文章主要记录算法篇相关的知识点，对实现感兴趣的可以阅读下这本书。 前言GC的历史悠久，其基础却又没有太大变化。1960年代后提出了三种GC算法  GC">
+<meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/bibop.jpg">
+<meta property="og:image" content="https://github.com/cfk1996/cfk1996.github.io/blob/source/photos/2020/gc_copy.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/compact.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/2finger.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/ungar.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/wechat.jpg">
+<meta property="og:updated_time" content="2020-11-22T09:50:53.876Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kunkun">
+<meta name="twitter:title" content="垃圾回收的算法与实现">
+<meta name="twitter:description" content="最近在看《垃圾回收算法与实现》这本书，稍微做些记录。 这本书分为两部分，算法篇和实现篇，算法篇通过伪代码的方式介绍了三种最基本的gc算法：标记清除，引用计数，复制算法以及由它们延展开的一些算法思想。实现篇介绍了已有的几种语言的垃圾回收具体实现。 本篇文章主要记录算法篇相关的知识点，对实现感兴趣的可以阅读下这本书。 前言GC的历史悠久，其基础却又没有太大变化。1960年代后提出了三种GC算法  GC">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/bibop.jpg">
   
     <link rel="alternative" href="/atom.xml" title="kunkun" type="application/atom+xml">
   
@@ -159,116 +171,297 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-垃圾回收的算法与实现" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/02/23/高性能mysql/" class="archive-article-date">
-  	<time datetime="2019-02-23T13:40:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-23</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/23/高性能mysql/">高性能mysql</a>
+    <h1 class="article-title" itemprop="name">
+      垃圾回收的算法与实现
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/11/21/垃圾回收的算法与实现/" class="archive-article-date">
+  	<time datetime="2020-11-21T12:22:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在看《垃圾回收算法与实现》这本书，稍微做些记录。</p>
+<p>这本书分为两部分，算法篇和实现篇，算法篇通过伪代码的方式介绍了三种最基本的gc算法：标记清除，引用计数，复制算法以及由它们延展开的一些算法思想。实现篇介绍了已有的几种语言的垃圾回收具体实现。 本篇文章主要记录算法篇相关的知识点，对实现感兴趣的可以阅读下这本书。</p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>GC的历史悠久，其基础却又没有太大变化。1960年代后提出了三种GC算法</p>
+<ul>
+<li>GC标记-清除算法(1960)</li>
+<li>引用计数法(1960)</li>
+<li>GC复制算法(1963)</li>
+</ul>
+<a id="more"></a>
+<p>这三种算法的思想在几十年来没有什么改变，现在各种语言的GC算法只是对这三种算法的一种组合和应用。</p>
+<p>评价GC算法的性能时，我们采用以下4个标准。</p>
+<ul>
+<li>吞吐量</li>
+<li>最大暂停时间（延迟）</li>
+<li>堆使用效率</li>
+<li>访问的局部性</li>
+</ul>
+<p>前两个指标比较好理解。众所周知，GC会有停顿时间，吞吐量追求的是一段时间内，gc停顿占用的时间最小，延迟指标追求的是每次GC的停顿时间最小。</p>
+<p>后两个指标书中也有介绍，长话短说。</p>
+<h4 id="堆使用效率"><a href="#堆使用效率" class="headerlink" title="堆使用效率"></a>堆使用效率</h4><p>比如复制算法，只有一半的内存是在使用，那么显然使用效率不高。</p>
+<p>另一方面，每个对象在内存中其实保存了两种数据，第一种我们程序所定义的字段，第二种GC所需要的一些数据，这些数据可以称为对象的头数据。头数据对开发者来说是不必要的，头对象太大也会影响堆的使用效率。</p>
+<h4 id="访问局部性"><a href="#访问局部性" class="headerlink" title="访问局部性"></a>访问局部性</h4><p>计算机有访问局部性的说法，即内存中或磁盘上相近的数据很可能被连续访问。计算机cpu的多级缓存就是对此的优化，那么GC算法在分配对象时，如果可以把相互引用的对象分配的空间靠在一起，则更有利于程序访问。</p>
+<h3 id="标记清除算法"><a href="#标记清除算法" class="headerlink" title="标记清除算法"></a>标记清除算法</h3><ul>
+<li>回收</li>
+</ul>
+<p>从root节点(全局变量,栈,寄存器)开始扫描(深度遍历，广度遍历)，将所有可以访问到的对象头数据中的mark字段设为true，表示对象是活的。扫描结束后，从堆的起始位置向后遍历所有对象，如果mark为true，则设为false.如果没有被标记，则意味着是垃圾，需要回收，把这片空间加到一个空闲链表中。</p>
+<ul>
+<li>分配</li>
+</ul>
+<p>当需要创建新对象时，从空闲链表中分配。分配的方式有很多种，假设需要4字节，那么可以从空闲链表中找到第一个大于等于4字节的空间用于分配；也可以遍历所有节点找到其中最适合4字节，即大小最接近于4并且大于等于4字节的空间用于分配；也可以找到最大的一片空间，划分4字节后，剩余的重新加入空闲链表。</p>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>用一个空闲链表来分配的话，会导致内存碎片的问题。即使剩余内存够用，也有可能分配失败。<br>同时也不利于前面提到的访问局部性，内存碎片导致很难有足够的空间把具有引用关系的对象放在一起，导致访问速度变慢。<br>一个链表分配速度也比较慢，分配时可能需要多次遍历链表。</p>
+<h4 id="优化措施"><a href="#优化措施" class="headerlink" title="优化措施"></a>优化措施</h4><p>介绍几个简单的优化措施</p>
+<ul>
+<li>多个链表</li>
+</ul>
+<p>将前面一个链表扩展为多个链表，比如2字节的一个，3字节的一个……大于10字节的一个(不可能所有大小都分配一个链表)。分配时可以根据大小快速的找到需要遍历的链表</p>
+<ul>
+<li>Bibop法</li>
+</ul>
+<p>标记清除会产生内存碎片，bibop通过将堆划分为几个固定大小的块，每个块只配置同样大小的对象解决这个问题。比如一个块里全是2个字大小的对象，一个是3个字大小的对象……</p>
+<p>但这样其实也不能完全解决碎片化的问题，如果2个字的对象很少，那个块不仅是碎片的，也浪费了，影响了堆的使用效率。</p>
+<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/bibop.jpg" alt="bibop"></p>
+<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>GC是回收垃圾对象，即无法访问到的对象。那么给每个对象增加一个引用计数变量用于统计其他对象对自己的引用，当引用为0时意味着成为垃圾，可以回收。</p>
+<h4 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h4><p>引用计数的优点是可以实时回收，当一个对象的计数变为0时就可以将其回收。而前面介绍的标记删除需要等到gc触发(如分配失败)时才会执行回收操作；这样的操作也降低了最大暂停时间，因为处理的对象少。</p>
+<p>但引用计数也有很多缺点：增减计数器的操作太多；计算器需要预留很多位(极端情况，一个对象被所有其他对象引用)，导致堆使用效率低；实现复杂；循环引用等。</p>
+<h3 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h3><p>GC复制算法是利用From空间进行分配的。当From空间被完全占满时，GC会将活动对象全部复制到To空间。当复制完成后，该算法会把From空间和To空间互换，GC也就结束了。From空间和To空间大小必须一致。</p>
+<p><img src="https://github.com/cfk1996/cfk1996.github.io/blob/source/photos/2020/gc_copy.png" alt="gc_copy"></p>
+<h4 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h4><ul>
+<li>优点</li>
+</ul>
+<p>复制算法吞吐量大。标记清除算法需要搜索所有的活对象，然后遍历所有的堆。而gc复制只需要搜索和复制活对象，需要的时间耗时更短，吞吐更高，堆的大小越大这种差距越明显。因为标记清除的耗时与堆大小成正比，而复制算法只关注活对象的大小。</p>
+<p>分配内存的速度更快。复制算法拥有的是连续的内存空间，不需要空闲链表，只需要判断当前的分块剩余大小是否大于所需内存大小就可以完成分配。</p>
+<p>没有碎片化的问题，复制时会将活对象复制到to空间，并且从to空间最左边开始。</p>
+<p>访问速度更快，在复制时可以将有引用关系的对象放在内存中相近的位置。</p>
+<ul>
+<li>缺点</li>
+</ul>
+<p>堆使用效率低，只有一半的堆内存被利用起来。</p>
+<h4 id="优化措施-1"><a href="#优化措施-1" class="headerlink" title="优化措施"></a>优化措施</h4><ul>
+<li>多空间复制算法</li>
+</ul>
+<p>可以把堆继续细分，举个例子。我们不把堆分成2份，而是分成10份，其中需要拿出2块空间分别作为From空间和To空间来执行GC复制算法。反正无论如何都要空出1块空间来当To空间，那我们就把这个额外负担降到整体的1/10就行了。但是剩下的8快空间又需要其他GC算法来处理，比如标记清除。</p>
+<p>不管GC标记-清除算法还是GC复制算法，都各有各的缺点。大家也都明白，几乎不存在没有缺点的万能算法。</p>
+<h3 id="标记-压缩算法"><a href="#标记-压缩算法" class="headerlink" title="标记-压缩算法"></a>标记-压缩算法</h3><p>GC标记-压缩算法（Mark Compact GC）是将GC标记-清除算法与GC复制算法相结合的产物。</p>
+<p>GC标记-压缩算法由标记阶段和压缩阶段构成。首先，这里的标记阶段和我们在讲解GC标记-清除算法时提到的标记阶段完全一样。接下来，我们要搜索数次堆来进行压缩。压缩阶段通过数次搜索堆来重新装填活动对象。因压缩而产生的优点我们已经在第4章中介绍GC复制算法时提过了，不过它跟GC复制算法不同，不用牺牲半个堆。</p>
+<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/compact.png" alt="compact"></p>
+<h4 id="优缺点-2"><a href="#优缺点-2" class="headerlink" title="优缺点"></a>优缺点</h4><p>标记压缩可以有效的利用堆，也避免了内存碎片化。但是压缩算法需要多次的搜索整个堆(1.标记 2.修改对象头数据的指针指向新位置 3.复制对象)，导致压缩耗时久，吞度量下降。</p>
+<h4 id="优化措施-2"><a href="#优化措施-2" class="headerlink" title="优化措施"></a>优化措施</h4><ul>
+<li>two-finger算法</li>
+</ul>
+<p>Two-Finger算法有着很大的制约条件，那就是“必须将所有对象整理成大小一致”。Two-Finger算法中，通过执行压缩操作来让活动对象填补空闲空间。此时为了让对象能恰好填补空闲空间，必须让所有对象大小一致。</p>
+<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/2finger.png" alt="2finger"></p>
+<p>gc时，利用双指针free和live，free从堆最左边向后遍历寻找空闲对象，live从堆最右边向前遍历寻找活对象，free和live都找到对象后进行活对象的移动，free和live相遇时gc结束(记住对象大小必须一样的前提)。</p>
+<p>这个算法可以减少扫描堆的次数，提高吞吐量。但是限制较大，同时也不利于局部性缓存优化。</p>
+<h3 id="分代垃圾回收"><a href="#分代垃圾回收" class="headerlink" title="分代垃圾回收"></a>分代垃圾回收</h3><p>人们从众多程序案例中总结出了一个经验：“大部分的对象在生成后马上就变成了垃圾，很少有对象能活得很久。”分代垃圾回收利用该经验，在对象中导入了“年龄”的概念，经历过一次GC后活下来的对象年龄为1岁。</p>
+<p>分代垃圾回收中把对象分类成几代，针对不同的代使用不同的GC算法，我们把刚生成的对象称为新生代对象，到达一定年龄的对象则称为老年代对象。</p>
+<p>众所周知，新生代对象大部分会变成垃圾。如果我们只对这些新生代对象执行GC会怎么样呢？除了引用计数法以外的基本算法，都会进行只寻找活动对象的操作（如GC标记-清除算法的标记阶段和GC复制算法等）。因此，如果很多对象都会死去，花费在GC上的时间应该就能减少。</p>
+<p>我们将对新对象执行的GC称为新生代GC（minor GC）。minor在这里的意思是“小规模的”。新生代GC的前提是大部分新生代对象都没存活下来，GC在短时间内就结束了。</p>
+<p>另一方面，新生代GC将存活了一定次数的新生代对象当作老年代对象来处理。我们把类似于这样的新生代对象上升为老年代对象的情况称为晋升（promotion）。</p>
+<p>因为老年代对象很难成为垃圾，所以我们对老年代对象减少执行GC的频率。相对于新生代GC，我们将面向老年代对象的GC称为老年代GC（major GC）。</p>
+<p>在这里有一点需要注意，那就是分代垃圾回收不能单独用来执行GC。我们需要把它和之前介绍的基本算法结合在一起使用，来提高那些基本算法的效率。也就是说，分代垃圾回收不是跟GC标记-清除算法和GC复制算法并列在一起供我们选择的算法，而是需要跟这些基本算法一并使用。</p>
+<p>下面介绍下由David Ungar研究出来的把GC复制算法和分代垃圾回收这两者组合运用的方法。</p>
+<p>堆结构如下：</p>
+<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/2020/ungar.png" alt="ungar"></p>
+<p>生成空间用于分配新对象，当生成空间满时发生新生代gc，将生成空间和其中一个幸存空间进行复制，目的地是另一个幸存空间，原理与复制算法一样。如果幸存空间也满了，则会提前晋升到老年代。</p>
+<p>记录集用于保存老年代对新生代的引用信息，因为新生代gc时，不仅需要考虑root节点的引用，也需要考虑来自老年代的引用。分代就是希望可以快速回收新生代的垃圾对象，减少gc停顿时间，如果通过遍历老年代的方式来搜索来自老年代的引用，则耗时太久，失去分代的意义。</p>
+<p>记录集相当于一个数组，保存的是老年代对象(发出引用的对象)的地址而不是新生代中被引用对象。因为发生gc后，新生代的对象在复制后会改变对象的位置，就需要修改引用对象的指针让其指向复制后的地址。 如果记录集只保存新生代中被引用的对象，从无法索引到老年代对象，即无法修改其指针地址；如果记录集对象保存的是老年代对象的地址，则可以访问到老年代，再间接的访问到新生代。</p>
+<p>ungar在老年代使用标记清除算法，不重复说了。</p>
+<p>这个算法看下来感觉就是java cms的爸爸算法了😄</p>
+<h4 id="优缺点-3"><a href="#优缺点-3" class="headerlink" title="优缺点"></a>优缺点</h4><p>大多数对象朝生夕死，发生在新生代，新生代的停顿时间又比较小；老年代的对象是针对很难变为垃圾的对象，发生频率低，但是停顿时间少，整体来看，可以改善gc停顿的时间，吞吐量还是得到了提升。</p>
+<p>分代的缺点是虽然大多数对象朝生夕死，但是肯定有特例，如果都是老年对象，则会导致频繁的老年代gc,gc时间变长，吞吐量下降。</p>
+<p>记录集维护了分代直接对象引用关系的同时也浪费了一些堆空间，降低了堆内存使用效率，有其他一些方法可以优化，不细说了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>书里面还有其他一些算法，如增量式垃圾回收和immix算法，太复杂了，不记录了。</p>
+<p>这本书算法篇里的大多数算法，尤其是三个基础算法，在学习java的cms和g1时就已经接触到了。那时是对一个具体的算法进行分解，得知有标记清除、计数、复制、分代等算法理念。看完这本书后的感觉是，这些基本的理念的组合才成就了cms和g1这样的算法，这里面的因果关系不太一样。</p>
+<p>基础的gc算法历史悠久却没有太大的变化，从评价gc性能的四项指标来看，目前也没有一种算法在各方面都是最优秀的，更多的是根据需要进行不同指标间的权衡，架构也是权衡的一个例子，没有银弹，都需要根据实际需要做一些取舍。但是通过对几种不同算法的组合和优化，的确可以在大多数情况下提高gc的效率。</p>
+<p>拿java中的gc举例，从cms到g1,g1就宣称要取代cms,对大多数应用来说，g1在整体指标上来看确实有些优势，但是针对到具体的项目来说，g1并不一定就比cms好。(具体比较可以看我之前的一篇文章<a href="https://cfk1996.github.io/2020/08/15/CMS%E5%92%8CG1%E4%BB%8B%E7%BB%8D-%E7%BF%BB%E8%AF%91%E8%87%AAoracle/" target="_blank" rel="external">CMS和G1介绍</a>)</p>
+<p>java中的gc也越来越无脑化，正常情况下并不需要我们开发者去调整什么参数，不过了解下gc原理也没有什么坏处。只有了解了cms和g1或者zgc各自的优缺点后，才能根据项目情况去选择(尴尬的是，其实选择余地不大，拿公司项目来说，老项目的jdk版本轻易不会更换(目前是8)，所以cms和g1也许可以相互换着尝试一下，新版本的zgc可能就难了)。</p>
+<p>这本书还是不错的，介绍了一些基础知识，图文并茂还有伪代码。实现篇因为我不会cpp，看着很费劲，就没怎么看，感兴趣的可以阅读一下这本书。如果有一定的gc知识，看起来还是挺快的，毕竟我们只要知道一个大概的流程，不需要去纠结算法的细节。</p>
+<h3 id="欢迎关注我的公众号"><a href="#欢迎关注我的公众号" class="headerlink" title="欢迎关注我的公众号"></a>欢迎关注我的公众号</h3><p>欢迎关注我的公众号，会经常分享一些技术文章和生活随笔～</p>
+<p><img src="https://raw.githubusercontent.com/cfk1996/cfk1996.github.io/source/photos/wechat.jpg" alt="飞坤呀"></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>thanks<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/zhifubao.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">基础</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GC</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/11/21/垃圾回收的算法与实现/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
+<nav id="article-nav">
+  
+    <a href="/2020/10/04/AQS源码分析/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          AQS源码分析
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/11/05/《redis设计与实现》笔记/" class="archive-article-date">
-  	<time datetime="2018-11-05T05:19:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-05</time>
-</a>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#堆使用效率"><span class="toc-number">1.1.</span> <span class="toc-text">堆使用效率</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#访问局部性"><span class="toc-number">1.2.</span> <span class="toc-text">访问局部性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标记清除算法"><span class="toc-number">2.</span> <span class="toc-text">标记清除算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#缺点"><span class="toc-number">2.1.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优化措施"><span class="toc-number">2.2.</span> <span class="toc-text">优化措施</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#引用计数算法"><span class="toc-number">3.</span> <span class="toc-text">引用计数算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#优缺点"><span class="toc-number">3.1.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制算法"><span class="toc-number">4.</span> <span class="toc-text">复制算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#优缺点-1"><span class="toc-number">4.1.</span> <span class="toc-text">优缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优化措施-1"><span class="toc-number">4.2.</span> <span class="toc-text">优化措施</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-压缩算法"><span class="toc-number">5.</span> <span class="toc-text">标记-压缩算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#优缺点-2"><span class="toc-number">5.1.</span> <span class="toc-text">优缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优化措施-2"><span class="toc-number">5.2.</span> <span class="toc-text">优化措施</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分代垃圾回收"><span class="toc-number">6.</span> <span class="toc-text">分代垃圾回收</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#优缺点-3"><span class="toc-number">6.1.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#欢迎关注我的公众号"><span class="toc-number">8.</span> <span class="toc-text">欢迎关注我的公众号</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-    	 
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/11/05/《redis设计与实现》笔记/">《redis设计与实现》笔记</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -291,9 +484,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
