@@ -161,6 +161,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-opentracing介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/13/opentracing介绍/">链路追踪介绍</a>
+    </h1>
+  
+
+        
+        <a href="/2020/12/13/opentracing介绍/" class="archive-article-date">
+  	<time datetime="2020-12-13T05:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近为我们的游戏服务器接入链路追踪系统，了解了公司内、公司外的多个链路追踪组件，链路追踪系统可以用于监控分布式系统的性能、调用关系、定位问题等。</p>
+<p>其中有个很重要的概念叫做<code>OpenTracing</code>,它不是一个可以下载、可以引入的组件或者程序，而是一种标准，在java里可以理解为定义了一系列链路追踪的<code>interface</code>，各个开发基础组件的公司可以基于这些接口，开发自己的链路追踪系统。 而业务开发者，只需要通过<code>opentracing</code>的api来进行业务埋点，具体实现可以随意选择，切换成本非常低，只需要修改数行代码就可以从一个链路追踪组件切换到另一个链路追踪组件；前提就是这些组件是符合<code>Opentracing</code>规范。</p>
+        
+          <a class="article-more-a" href="/2020/12/13/opentracing介绍/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">监控</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/12/13/opentracing介绍/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-垃圾回收的算法与实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -916,87 +997,6 @@
 
 
   
-    <article id="post-Java阻塞队列源码-2-LinkedBlockingQueue" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/">Java阻塞队列源码(2)-LinkedBlockingQueue</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/" class="archive-article-date">
-  	<time datetime="2019-07-03T09:11:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在系列的第一篇中介绍了<code>ArrayBlockingQueue</code>的源码实现，用数组实现了阻塞队列，作为系列的第二篇，将分析<code>LinkedBlockingQueue</code>的源码。基于链表的队列与基于数组的队列相比，基于链表的数据结构将提供更大的容量，但是随机读写的性能会低于按下标访问的速度，这些由于底层存储元素的数据结构不同导致的性能差异在两种<code>List</code>的实现中也体现了出来。</p>
-<h3 id="构造函数与成员变量"><a href="#构造函数与成员变量" class="headerlink" title="构造函数与成员变量"></a>构造函数与成员变量</h3><p>首先看下<code>LinkedBlockingQueue</code>类的继承关系,与<code>ArrayBlockingQueue</code>的继承关系一致,<code>AbstractQueue</code>是一个抽象类，用模板方法设计模式封装了几个简单的方法，具体的方法实现在实现类中。<code>BlockingQueue</code>接口则定义了阻塞队列的通用方法，在系列第一篇文章中介绍过，不再分析。</p>
-        
-          <a class="article-more-a" href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java源码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/03/Java阻塞队列源码-2-LinkedBlockingQueue/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1098,7 +1098,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1110,7 +1110,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1118,19 +1118,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color2">Java并发</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color3">监控</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">GC</a>
+                <a href="javascript:void(0)" class="js-tag color4">分布式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1142,15 +1138,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">GC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java并发</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分布式</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
             
             <div class="clearfix"></div>
